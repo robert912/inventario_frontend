@@ -1,0 +1,93 @@
+
+[data-theme-version="dark"]
+.select2-search__field {
+    color: #fff;
+}
+
+[data-theme-version="dark"] .table td.text-danger {
+    color: #ff5e5e !important; /* Cambiar el color del texto a rojo (#ff0000) */
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered,
+.select2-container--default .select2-results__option {
+    text-transform: capitalize;
+}
+
+#tarjetas .tarjeta_Acciones {
+    transition: all 0.3s ease;
+  }
+
+#tarjetas .tarjeta_Acciones:hover {
+transform: scale(1.05);
+}
+
+.no-hand-cursor {
+    cursor: default; /* Esto mantiene el cursor por defecto */
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .card{
+        display: none;
+    }
+    .col-form-label {
+        padding-top:0;
+        padding-bottom: 0;
+        line-height: 0;
+    }
+    
+    .modalPrint .modal-body, .modalPrint .modal-body * {
+        visibility: visible;
+    }
+    #modalPrintIngreso .modal-body{
+        position: absolute;
+        top: 0; /* Posición desde arriba */
+        left: 20px; /* Posición desde la izquierda */
+        width: 95%;
+        height: auto;
+        font-size: large;
+        padding: 0; /* Elimina rellenos */
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
+
+    .imagen {
+        width: 60%; /* Ajusta el ancho de la imagen al 100% del contenedor */
+        height: auto; /* Permite que la altura se ajuste automáticamente para mantener la proporción */
+        display: inline-block; /* Para evitar espacios extraños debajo de la imagen */
+    }
+
+    #modalPrintTarjeta .modal-body{
+        padding: 0;
+        display: block;
+        font-size: smaller; /* Ajusta el tamaño de la fuente según sea necesario */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    #modalPrintTarjeta .table th, #modalPrintTarjeta .table td{
+        padding: 0.6rem 0.625rem;
+    }
+}
+
+.modal-xxl {
+    --bs-modal-width: 90vw; /* 90% del ancho de la ventana */
+    max-width: 90vw; /* Fallback en caso de que las variables no funcionen */
+}
+
+ul.info_lista {
+    line-height: 1.2;
+}
+
+ul.info_lista li {
+    font-size: 14px;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block; /* Asegura que estén uno debajo del otro */
+}

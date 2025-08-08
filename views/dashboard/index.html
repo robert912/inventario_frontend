@@ -1,0 +1,156 @@
+<div class="container-fluid">
+
+	<!--**********************************
+		Ecabezado del Dashboard
+	***********************************-->
+	<div class="row mb-4">
+		<div class="col-12">
+			<div class="d-flex justify-content-between align-items-center">
+				<div>
+					<h1 class="h3 mb-0">
+						<i class="fas fa-laptop text-primary me-2"></i>
+						Inventario de Dispositivos
+					</h1>
+					<p class="text-muted mb-0">Gestión completa de equipos y dispositivos</p>
+				</div>
+				<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deviceModal" onclick="openAddModal()">
+					<i class="fas fa-plus me-2"></i>Agregar Dispositivo
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+<!--**********************************
+			Inicio Targeta de estados
+	***********************************-->
+		<div class="col-xl-3 col-6">
+			<div class="card box-hover">
+				<div class="card-body bg-success-light">
+					<div class="d-flex align-items-center">
+						<div class="icon-box icon-box-lg text-success bg-success-light rounded-circle">
+							<i class="bi bi-card-checklist fa-3x"></i>
+						</div>
+						<div class="total-projects ms-3">
+							<h3 id="totalDevices" class="text-success count">0</h3>
+							<span>Total Dispositivos</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-3 col-6">
+			<div class="card box-hover">
+				<div class="card-body bg-purple-light">
+					<div class="d-flex align-items-center">
+						<div class="icon-box icon-box-lg text-purple bg-purple-light rounded-circle">
+							<i class="bi bi-box-seam fa-3x"></i>
+						</div>
+						<div class="total-projects ms-3">
+							<h3 id="total_espera" class="text-purple count">0</h3> 
+							<span>Total En Espera</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-3 col-6">
+			<div class="card box-hover">
+				<div class="card-body bg-dark-light">
+					<div class="d-flex align-items-center">
+						<div class="icon-box icon-box-lg text-dark bg-dark-light rounded-circle">
+							<i class="bi bi-pause-circle fa-3x"></i>
+						</div>
+						<div class="total-projects ms-3">
+							<h3 id="total_pausa" class="text-dark count">0</h3>
+							<span>Total En Pausa</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-3 col-6 tarjeta_cancelado ">
+			<div class="card box-hover">
+				<div class="card-body bg-danger-light">
+					<div class="d-flex align-items-center">
+						<div class="icon-box icon-box-lg text-danger bg-danger-light rounded-circle">
+							<i class="bi bi-shield-x fa-3x"></i>
+						</div>
+						<div class="total-projects ms-3">
+							<h3 id="total_cancelado" class="text-danger count">0</h3> 
+							<span>Total Cancelados</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<!--**********************************
+			Fin Targeta de estados
+	***********************************-->
+
+	<!--**********************************
+			Inicio Tabla Estado Equipos
+	***********************************-->
+		<div class="col-12 active-p">
+			<div class="card">
+				<div class="card-body p-2">
+					<div class="table-responsive active-projects shorting">
+					
+						<div class="tbl-caption d-flex justify-content-between">
+							<h4 class="heading mb-0"><i class="fas fa-table me-2"></i>Lista de Dispositivos</h4>
+
+						</div>
+						<table id="tablaEstadoEquipos" class="table display" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+								  	<th>ID</th>
+									<th>Marca</th>
+									<th>Modelo</th>
+									<th>N° Serie</th>
+									<th>Categoría</th>
+									<th>Estado</th>
+									<th>Ubicación</th>
+									<th>Responsable</th>
+									<th>Fecha Ingreso</th>
+									<th>Precio</th>
+									<th>Archivos</th>
+								  	<th style="width: 5rem">Acciones</th>
+								</tr>
+								<tr>
+								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-id" name="id" style="width: 100%; min-width: 60px;" autocomplete="off"></th>
+								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-cliente" name="cliente" style="width: 100%;" autocomplete="off"></th>
+								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-equipo" name="equipo" style="width: 100%;" autocomplete="off"></th>
+								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-marca" name="marca" style="width: 100%;" autocomplete="off"></th>
+								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-modelo" name="modelo" style="width: 100%;" autocomplete="off"></th>
+								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-serie" name="serie" style="width: 100%;" autocomplete="off"></th>
+								  <th style="width: 100%; min-width: 90px; max-width: 120px;"></th>
+								  <th class="search-change sorting_disabled p-1" style="width: 120px; min-width: 120px; max-width: 120px;">
+									<select class="form-select form-select-sm" id="select-estado" name="estado" style="width: 100%;"></select>
+								  </th>
+								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-certificado" name="certificado" style="width: 100%;" autocomplete="off"></th>
+								  <th><input type="text" aria-hidden="true" style="position: absolute; top: -1000px;" ><!--Se Agregar este input para evitar el autocompletado flotante--></th>
+								  <th></th>
+								  <th></th>
+								  <!--<th class="search-change sorting_disabled p-1"><input type="search" id="search-fecha_ingreso" name="fecha_ingreso" style="width: 100%;" autocomplete="off"></th>
+								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-fecha_termino" name="fecha_termino" style="width: 100%;" autocomplete="off"></th>-->
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+<!--**********************************
+		Fin Tabla Estado Equipos
+***********************************-->
+	</div>
+</div>
+<!--**********************************
+Modal Imprimir id calibracion
+***********************************-->
+<div id="modalContainer"></div>
+
+<script>
+    $('#full-layout').append("<script type='text/javascript' src='src/js_files/dashboard/index.js?v=" + VERSION_JS + "'><\/script>");
+	//$('#full-layout').append("<script type='text/javascript' src='/js_files/dashboard/reingreso.js?v=" + VERSION_JS + "'><\/script>");
+</script>
