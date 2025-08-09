@@ -390,3 +390,42 @@ $('#tablaEstadoEquipos').on('click', 'a.cancelar', function () {
     tableEstados.destroy()
     loadDataTable()
 });*/
+
+
+
+// Abrir modal para agregar
+function openAddModal() {
+    editingId = null;
+    currentDetailId = null;
+    document.getElementById('modalTitle').textContent = 'Agregar Dispositivo';
+    document.getElementById('deviceForm').reset();
+    document.getElementById('deviceId').value = '';
+    document.getElementById('archivosList').innerHTML = '';
+    
+    // Establecer fecha actual por defecto
+    document.getElementById('fechaIngreso').value = new Date().toISOString().split('T')[0];
+    
+    // Limpiar validaciones
+    document.getElementById('deviceForm').classList.remove('was-validated');
+
+    $.ajax({
+        url: URL_BACKEND + '/categorias/activas',
+        type: 'GET',
+        dataType: 'json',
+        success: async function (rs) {
+            console.log(rs);
+            if (rs.success) {
+                const selectCategoria = document.getElementById('categoria');
+                selectCategoria.innerHTML = '<option value="" selected disabled>Seleccione una categoría</option>';
+                rs.data.forEach(categoria => {
+                    const option = document.createElement('option');
+                    option.value = categoria.id;
+                    option.textContent = categoria.nombre;
+                    selectCategoria.appendChild(option);
+                });
+            }
+        },error: function (error) {
+            console.error('Error al cargar categorías:', error);
+        }
+    });
+}

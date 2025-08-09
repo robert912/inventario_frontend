@@ -143,6 +143,162 @@
 <!--**********************************
 		Fin Tabla Estado Equipos
 ***********************************-->
+<!--**********************************
+Modal para Agregar/Editar Dispositivo
+***********************************-->
+        <div class="modal fade" id="deviceModal" tabindex="-1" data-bs-backdrop="static">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">Agregar Dispositivo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="deviceForm" novalidate>
+                            <input type="hidden" id="deviceId">
+                            
+                            <!-- Información Básica -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h6 class="text-primary border-bottom pb-2">
+                                        <i class="fas fa-info-circle me-2"></i>Información Básica
+                                    </h6>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="categoria" class="form-label">Categoría *</label>
+                                    <select class="form-select" id="categoria" required>
+                                        <option value="">Seleccionar categoría</option>
+                                        <option value="Laptop">Laptop</option>
+                                        <option value="Desktop">Desktop</option>
+                                        <option value="Monitor">Monitor</option>
+                                        <option value="Impresora">Impresora</option>
+                                        <option value="Tablet">Tablet</option>
+                                        <option value="Smartphone">Smartphone</option>
+                                        <option value="Servidor">Servidor</option>
+                                        <option value="Router">Router</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <div class="invalid-feedback">Por favor seleccione una categoría</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="dispositivo" class="form-label">Dispositivo *</label>
+                                    <select class="form-select" id="dispositivo" required>
+                                        <option value="">Seleccionar categoría</option>
+                                        <option value="Laptop">Laptop</option>
+                                        <option value="Desktop">Desktop</option>
+                                        <option value="Monitor">Monitor</option>
+                                        <option value="Impresora">Impresora</option>
+                                        <option value="Tablet">Tablet</option>
+                                        <option value="Smartphone">Smartphone</option>
+                                        <option value="Servidor">Servidor</option>
+                                        <option value="Router">Router</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                    <div class="invalid-feedback">Por favor ingrese el Dispositivo</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="marca" class="form-label">Marca *</label>
+                                    <input type="text" class="form-control" id="marca" required>
+                                    <div class="invalid-feedback">Por favor ingrese la marca</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="modelo" class="form-label">Modelo *</label>
+                                    <input type="text" class="form-control" id="modelo" required>
+                                    <div class="invalid-feedback">Por favor ingrese el modelo</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="serie" class="form-label">Número de Serie *</label>
+                                    <input type="text" class="form-control" id="serie" required>
+                                    <div class="invalid-feedback">Por favor ingrese el número de serie</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="estado" class="form-label">Estado *</label>
+                                    <select class="form-select" id="estado" required>
+                                        <option value="">Seleccionar estado</option>
+                                        <option value="Activo">Activo</option>
+                                        <option value="Inactivo">Inactivo</option>
+                                        <option value="En Reparación">En Reparación</option>
+                                        <option value="Dado de Baja">Dado de Baja</option>
+                                    </select>
+                                    <div class="invalid-feedback">Por favor seleccione un estado</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="ubicacion" class="form-label">Ubicación *</label>
+                                    <input type="text" class="form-control" id="ubicacion" required placeholder="Ej: Oficina Principal - Piso 2">
+                                    <div class="invalid-feedback">Por favor ingrese la ubicación</div>
+                                </div>
+                            </div>
+
+                            <!-- Información Adicional -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h6 class="text-primary border-bottom pb-2">
+                                        <i class="fas fa-user-cog me-2"></i>Información Adicional
+                                    </h6>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="responsable" class="form-label">Responsable *</label>
+                                    <input type="text" class="form-control" id="responsable" required>
+                                    <div class="invalid-feedback">Por favor ingrese el responsable</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="fechaIngreso" class="form-label">Fecha de Ingreso *</label>
+                                    <input type="date" class="form-control" id="fechaIngreso" required>
+                                    <div class="invalid-feedback">Por favor seleccione la fecha de ingreso</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="fechaCompra" class="form-label">Fecha de Compra</label>
+                                    <input type="date" class="form-control" id="fechaCompra">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="proveedor" class="form-label">Proveedor</label>
+                                    <input type="text" class="form-control" id="proveedor">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="precio" class="form-label">Precio (USD)</label>
+                                    <input type="number" class="form-control" id="precio" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="garantia" class="form-label">Garantía</label>
+                                    <input type="text" class="form-control" id="garantia" placeholder="Ej: 2 años">
+                                </div>
+                                <div class="col-12">
+                                    <label for="observaciones" class="form-label">Observaciones</label>
+                                    <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Archivos -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h6 class="text-primary border-bottom pb-2">
+                                        <i class="fas fa-paperclip me-2"></i>Archivos Adjuntos
+                                    </h6>
+                                </div>
+                                <div class="col-12">
+                                    <label for="archivos" class="form-label">Documentos e Imágenes</label>
+                                    <input type="file" class="form-control" id="archivos" multiple accept="image/*,.pdf,.doc,.docx,.txt">
+                                    <div class="form-text">Puedes subir imágenes (JPG, PNG), PDFs y documentos de Word. Máximo 10MB por archivo.</div>
+                                    <div id="archivosList" class="mt-3"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Cancelar
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="saveDevice()">
+                            <i class="fas fa-save me-2"></i>Guardar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--**********************************
+Fin Modal para Agregar/Editar Dispositivo
+***********************************-->
+
 	</div>
 </div>
 <!--**********************************
