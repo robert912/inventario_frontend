@@ -408,24 +408,109 @@ function openAddModal() {
     // Limpiar validaciones
     document.getElementById('deviceForm').classList.remove('was-validated');
 
-    $.ajax({
+    /*$.ajax({
         url: URL_BACKEND + '/categorias/activas',
         type: 'GET',
         dataType: 'json',
-        success: async function (rs) {
-            console.log(rs);
-            if (rs.success) {
+        success: function (res) {
+            console.log(res);
+            const categorias = res.response?.data || [];
+
+            if (categorias.length > 0) {
                 const selectCategoria = document.getElementById('categoria');
                 selectCategoria.innerHTML = '<option value="" selected disabled>Seleccione una categoría</option>';
-                rs.data.forEach(categoria => {
+                
+                categorias.forEach(categoria => {
                     const option = document.createElement('option');
                     option.value = categoria.id;
                     option.textContent = categoria.nombre;
                     selectCategoria.appendChild(option);
                 });
             }
-        },error: function (error) {
+        },
+        error: function (error) {
             console.error('Error al cargar categorías:', error);
+        }
+    });*/
+
+
+
+    // Cargar categorías (con change que llama a otra API)
+    cargarSelect({
+        selectorId: 'categoria',
+        url: URL_BACKEND + '/categorias/activas',
+        placeholder: 'Seleccione una categoría',
+        onChange: function (categoriaId) {
+            console.log("Categoría seleccionada:", categoriaId);
+            // Aquí puedes llamar a otra API
+            $.get(URL_BACKEND + '/productos/categoria/' + categoriaId, function (res) {
+                console.log("Productos de la categoría:", res);
+            });
+        }
+    });
+
+    // Cargar ubicación (sin change)
+    cargarSelect({
+        selectorId: 'ubicacion',
+        url: URL_BACKEND + '/ubicaciones/activas',
+        placeholder: 'Seleccione una ubicación'
+    });
+
+    // Cargar estado (sin change)
+    cargarSelect({
+        selectorId: 'estado',
+        url: URL_BACKEND + '/estados',
+        placeholder: 'Seleccione un estado'
+    });
+
+    // Cargar responsable (con change para algo)
+    cargarSelect({
+        selectorId: 'responsable',
+        url: URL_BACKEND + '/responsables/activos',
+        textField: 'nombreCompleto',
+        placeholder: 'Seleccione un responsable',
+        onChange: function (idResponsable) {
+            console.log("Responsable seleccionado:", idResponsable);
+        }
+    });
+}
+
+
+
+function cargarSelect({ 
+    selectorId, 
+    url, 
+    valueField = 'id', 
+    textField = 'nombre', 
+    placeholder = 'Seleccione una opción',
+    onChange = null // Callback opcional
+}) {
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function (res) {
+            const datos = res.response?.data || [];
+
+            const selectElem = document.getElementById(selectorId);
+            selectElem.innerHTML = `<option value="" selected disabled>${placeholder}</option>`;
+
+            datos.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item[valueField];
+                option.textContent = item[textField];
+                selectElem.appendChild(option);
+            });
+
+            // Si se pasa un callback, lo asignamos al evento change
+            if (typeof onChange === 'function') {
+                $(selectElem).off('change').on('change', function () {
+                    onChange(this.value);
+                });
+            }
+        },
+        error: function (error) {
+            console.error(`Error al cargar selector ${selectorId}:`, error);
         }
     });
 }
