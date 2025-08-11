@@ -166,37 +166,20 @@ Modal para Agregar/Editar Dispositivo
                                 </div>
                                 <div class="col-md-4">
                                     <label for="categoria" class="form-label">Categoría *</label>
-                                    <select class="form-select" id="categoria" required>
+                                    <select class="form-select form-control" id="categoria" required>
                                     </select>
                                     <div class="invalid-feedback">Por favor seleccione una categoría</div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="producto" class="form-label">Dispositivo *</label>
-                                    <select class="form-select" id="producto" required>
-                                        <option value="">Seleccionar categoría</option>
-                                        <option value="Laptop">Laptop</option>
-                                        <option value="Desktop">Desktop</option>
-                                        <option value="Monitor">Monitor</option>
-                                        <option value="Impresora">Impresora</option>
-                                        <option value="Tablet">Tablet</option>
-                                        <option value="Smartphone">Smartphone</option>
-                                        <option value="Servidor">Servidor</option>
-                                        <option value="Router">Router</option>
-                                        <option value="Otro">Otro</option>
+                                    <label for="producto" class="form-label">Dispositivo<span class="required">*</span></label>
+                                    <select class="form-select form-control" id="producto" required>
                                     </select>
                                     <div class="invalid-feedback">Por favor ingrese el Dispositivo</div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label form="select_marca" class="text-label form-label">Marca<span class="required">*</span></label>
-                                    <select id="select_marca" class="form-control select2 valid" >
-                                        <option></option>
-                                    </select>
-                                    <div class="invalid-feedback">Seleccione una Marca.</div>
-                                </div>
-
+                                <div class="col-md-4 mt-2 d-none" id="otroDispositivoContainer"></div>
                                 <div class="col-md-4">
                                     <label for="marca" class="form-label">Marca *</label>
-                                    <input type="text" class="form-control" id="marca" required>
+                                    <select class="form-select form-control" id="marca" required></select>
                                     <div class="invalid-feedback">Por favor ingrese la marca</div>
                                 </div>
                                 <div class="col-md-4">
@@ -222,12 +205,17 @@ Modal para Agregar/Editar Dispositivo
                                 </div>
                                 <div class="col-md-4">
                                     <label for="ubicacion" class="form-label">Ubicación *</label>
-                                    <input type="text" class="form-control" id="ubicacion" required placeholder="Ej: Oficina Principal - Piso 2">
+                                    <select class="form-select" id="ubicacion" required placeholder="Ej: Oficina Principal - Piso 2"></select>
                                     <div class="invalid-feedback">Por favor ingrese la ubicación</div>
                                 </div>
                             </div>
 
                             <!-- Información Adicional -->
+                             <select class="js-example-basic-single" name="state">
+  <option value="AL">Alabama</option>
+    ...
+  <option value="WY">Wyoming</option>
+</select>
                             <div class="row mb-4">
                                 <div class="col-12">
                                     <h6 class="text-primary border-bottom pb-2">

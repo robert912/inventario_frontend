@@ -408,7 +408,6 @@ function openAddModal() {
     // Limpiar validaciones
     document.getElementById('deviceForm').classList.remove('was-validated');
 
-
     
     cargarSelector("categoria", null, "/categorias/activas", 'Seleccione una categoría');
     // Evento change para cada selector
@@ -417,9 +416,20 @@ function openAddModal() {
         $('#select_equipo').prop('disabled', false);
         //$("#btnEquipoAdd").removeAttr("style").prop('disabled', false);
     });
-    $("#select_equipo").off("change").change(function(){
-        cargarSelector("select_marca", $(this).val(), "/marcabyequipo");
-        $('#select_marc').prop('disabled', false);
+    $("#producto").off("change").change(function(){
+        const container = document.getElementById('otroDispositivoContainer');
+        $("#otroDispositivoContainer").addClass("d-none");
+        container.innerHTML = '';
+        if (this.value == 9) { // Si el valor es "Otro"
+            $("#otroDispositivoContainer").removeClass("d-none");
+            container.innerHTML = `
+                <label for="otroProducto" class="form-label">Especifique el dispositivo<span class="required">*</span></label>
+                <input type="text" class="form-control" id="otroProducto" placeholder="Ingrese el dispositivo" required>
+                <div class="invalid-feedback">Por favor ingrese el dispositivo</div>
+            `;
+        }
+        //cargarSelector("select_marca", $(this).val(), "/marcabyequipo");
+        //$('#select_marc').prop('disabled', false);
         //$("#btnMarcaAdd").removeAttr("style").prop('disabled', false);
     });
     $("#select_marc").off("change").change(function(){
@@ -428,13 +438,10 @@ function openAddModal() {
         $('#select_modelo').prop('disabled', false);
         //$("#btnModeloAdd").removeAttr("style").prop('disabled', false);
     });
-    cargarMarcas()
+    
 }
 
 
-
-
-//cargar cada Selector (tipo_equipo, equipo, marca, modelo)
 function cargarSelector(selectorId, dataId, url, placeholder) {
     $.ajax({
         url:  URL_BACKEND + url,
@@ -477,37 +484,3 @@ function cargarSelector(selectorId, dataId, url, placeholder) {
     });
 }
 
-//Carga lista de Marcas
-function cargarMarcas(){
-    if ($('#select_marca').hasClass('select2-hidden-accessible')) {
-        $('#select_marca').select2('destroy');
-    }
-    alert('Select2')
-    $('#select_marca').select2({
-        placeholder: 'Ingrese Marca',
-        //minimumInputLength: 1,  // Mínimo número de caracteres para iniciar la búsqueda
-        ajax: {
-            url: URL_BACKEND + "/marca/activas",
-            dataType: 'json',
-            data: function (params) {
-                console.log(params.term)
-                return {
-                    nombre: params.term, // término de búsqueda
-                };
-            },
-            processResults: function (response) {
-                console.log(response)
-                // Procesa los resultados y los devuelve en el formato esperado por Select2
-                return {
-                    results: response.data.map(function(item) {
-                        console.log(item)
-                        return {
-                            id: item.id,
-                            text: item.nombre
-                        };
-                    })
-                };
-            }
-        }
-    });
-}
