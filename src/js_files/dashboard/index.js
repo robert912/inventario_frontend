@@ -409,13 +409,16 @@ function openAddModal() {
     document.getElementById('deviceForm').classList.remove('was-validated');
 
     
-    cargarSelector("categoria", null, "/categorias/activas", 'Seleccione una categoría');
-    // Evento change para cada selector
+    cargarSelector("marca", null, "/marca/activas", 'Seleccione una Marca');
+    cargarSelector("estado", null, "/estado_dispositivo", 'Seleccione un Estado');
+    cargarSelector("categoria", null, "/categorias/activas", 'Seleccione una Categoría');
+
+
     $("#categoria").off("change").change(function(){
-        cargarSelector("producto", $(this).val(), "/productos/categoria", 'Seleccione un producto');
-        $('#select_equipo').prop('disabled', false);
-        //$("#btnEquipoAdd").removeAttr("style").prop('disabled', false);
+        cargarSelector("producto", $(this).val(), "/productos/categoria", 'Seleccione un Dispositivo');
+        $('#select_equipo').prop('disabled', false);;
     });
+    
     $("#producto").off("change").change(function(){
         const container = document.getElementById('otroDispositivoContainer');
         $("#otroDispositivoContainer").addClass("d-none");
@@ -428,10 +431,9 @@ function openAddModal() {
                 <div class="invalid-feedback">Por favor ingrese el dispositivo</div>
             `;
         }
-        //cargarSelector("select_marca", $(this).val(), "/marcabyequipo");
-        //$('#select_marc').prop('disabled', false);
-        //$("#btnMarcaAdd").removeAttr("style").prop('disabled', false);
     });
+
+
     $("#select_marc").off("change").change(function(){
         id_marca_send = $(this).find('option:selected').attr('id_marca');
         cargarSelector("select_modelo", $(this).val(), "/modelobymarca");
