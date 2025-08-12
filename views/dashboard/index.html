@@ -194,21 +194,17 @@ Modal para Agregar/Editar Dispositivo
                                     <div class="invalid-feedback">Por favor ingrese el número de serie</div>
                                 </div>
                                 <div class="col-md-4">
+                                    <label for="invetario" class="form-label">Número Inventario (si aplica)</label>
+                                    <input type="text" class="form-control" id="invetario" required>
+                                    <div class="invalid-feedback">Por favor ingrese el número de serie</div>
+                                </div>
+                                <div class="col-md-4">
                                     <label for="estado" class="form-label">Estado *</label>
                                     <select class="form-select form-control" id="estado" required>
-                                        <option value="">Seleccionar estado</option>
-                                        <option value="Activo">Activo</option>
-                                        <option value="Inactivo">Inactivo</option>
-                                        <option value="En Reparación">En Reparación</option>
-                                        <option value="Dado de Baja">Dado de Baja</option>
                                     </select>
                                     <div class="invalid-feedback">Por favor seleccione un estado</div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="ubicacion" class="form-label">Ubicación *</label>
-                                    <select class="form-select form-control" id="ubicacion" required placeholder="Ej: Oficina Principal - Piso 2"></select>
-                                    <div class="invalid-feedback">Por favor ingrese la ubicación</div>
-                                </div>
+                                
                             </div>
 
                             <!-- Información Adicional -->
@@ -224,6 +220,16 @@ Modal para Agregar/Editar Dispositivo
                                     <div class="invalid-feedback">Por favor ingrese el responsable</div>
                                 </div>
                                 <div class="col-md-4">
+                                    <label for="ubicacion" class="form-label">Ubicación *</label>
+                                    <select class="form-select form-control" id="ubicacion" required placeholder="Ej: Oficina Principal - Piso 2"></select>
+                                    <div class="invalid-feedback">Por favor ingrese la ubicación</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="adquisicion" class="form-label">Forma Adquisición*</label>
+                                    <select class="form-select form-control" id="adquisicion" required placeholder="Ej: SDT, Proyecto, USACH"></select>
+                                    <div class="invalid-feedback">Por favor ingrese forma de Adquisición</div>
+                                </div>
+                                <div class="col-md-4">
                                     <label for="fechaIngreso" class="form-label">Fecha de Ingreso *</label>
                                     <input type="date" class="form-control" id="fechaIngreso" required>
                                     <div class="invalid-feedback">Por favor seleccione la fecha de ingreso</div>
@@ -231,18 +237,16 @@ Modal para Agregar/Editar Dispositivo
                                 <div class="col-md-4">
                                     <label for="fechaCompra" class="form-label">Fecha de Compra</label>
                                     <input type="date" class="form-control" id="fechaCompra">
+                                    <div class="invalid-feedback">Por favor seleccione la fecha de Compra</div>
+                                </div>
+                                <div class="col-md-4 d-none" id="divBaja">
+                                    <label for="fechaBaja" class="form-label">Fecha de Baja</label>
+                                    <input type="date" class="form-control" id="fechaBaja">
+                                    <div class="invalid-feedback">Por favor seleccione la fecha de Baja</div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="proveedor" class="form-label">Proveedor</label>
-                                    <input type="text" class="form-control" id="proveedor">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="precio" class="form-label">Precio (USD)</label>
-                                    <input type="number" class="form-control" id="precio" step="0.01" min="0">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="garantia" class="form-label">Garantía</label>
-                                    <input type="text" class="form-control" id="garantia" placeholder="Ej: 2 años">
+                                    <label for="metodoCompra" class="form-label">Boleta o Factura</label>
+                                    <input type="text" class="form-control" id="metodoCompra">
                                 </div>
                                 <div class="col-12">
                                     <label for="observaciones" class="form-label">Observaciones</label>

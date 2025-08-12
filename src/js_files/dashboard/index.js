@@ -404,6 +404,7 @@ function openAddModal() {
     
     // Establecer fecha actual por defecto
     document.getElementById('fechaIngreso').value = new Date().toISOString().split('T')[0];
+    document.getElementById('fechaBaja').value = new Date().toISOString().split('T')[0];
     
     // Limpiar validaciones
     document.getElementById('deviceForm').classList.remove('was-validated');
@@ -416,7 +417,7 @@ function openAddModal() {
 
     $("#categoria").off("change").change(function(){
         cargarSelector("producto", $(this).val(), "/productos/categoria", 'Seleccione un Dispositivo');
-        $('#select_equipo').prop('disabled', false);;
+        $('#select_equipo').prop('disabled', false);
     });
     
     $("#producto").off("change").change(function(){
@@ -433,12 +434,11 @@ function openAddModal() {
         }
     });
 
-
-    $("#select_marc").off("change").change(function(){
-        id_marca_send = $(this).find('option:selected').attr('id_marca');
-        cargarSelector("select_modelo", $(this).val(), "/modelobymarca");
-        $('#select_modelo').prop('disabled', false);
-        //$("#btnModeloAdd").removeAttr("style").prop('disabled', false);
+    $("#estado").off("change").change(function(){
+        $("#divBaja").addClass("d-none");
+        if (this.value == 4) { // Si el valor es "De Baja"
+            $("#divBaja").removeClass("d-none");
+        }
     });
     
 }

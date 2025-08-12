@@ -4947,7 +4947,10 @@ textarea.form-control-lg {
 
 @media (min-width: 1200px) {
   .modal-xl {
-    --bs-modal-width: 1140px; } }
+    --bs-modal-width: 1140px; } 
+  .modal-xxl {
+    --bs-modal-width: 90%; }
+  }
 
 .modal-fullscreen {
   width: 100vw;
