@@ -409,28 +409,49 @@ function openAddModal() {
     // Limpiar validaciones
     document.getElementById('deviceForm').classList.remove('was-validated');
 
-    
-    cargarSelector("marca", null, "/marca/activas", 'Seleccione una Marca');
-    cargarSelector("estado", null, "/estado_dispositivo", 'Seleccione un Estado');
     cargarSelector("categoria", null, "/categorias/activas", 'Seleccione una Categoría');
+    cargarSelector("estado", null, "/estado_dispositivo", 'Seleccione un Estado');
+    cargarSelector("responsable", null, "/responsable/activas", 'Seleccione un Responsable');
+    //cargarSelector("ubicacion", null, "/ubicacion/activas", 'Seleccione una Ubicación');
 
+    // Inicializo Select2 después de cargar el modal
+    setTimeout(() => {
+        $("#producto, #marca, #modelo, #ubicacion, #adquisicion").select2({
+            dropdownParent: $("#deviceModal"), // importante para que funcione dentro del modal
+            tags: true, // permite agregar nuevos valores
+            placeholder: "Escriba o seleccione una opción",
+            allowClear: true,
+            width: "100%"
+        });
+    }, 300);
 
+    // Encadenado de selects
     $("#categoria").off("change").change(function(){
-        cargarSelector("producto", $(this).val(), "/productos/categoria", 'Seleccione un Dispositivo');
-        $('#select_equipo').prop('disabled', false);
+        cargarSelector("producto", $(this).val(), "/productos/categoria", 'Seleccione un Equipo');
+        $('#producto').prop('disabled', false);
+        $('#marca').empty().trigger('change').prop('disabled', true);
+        $('#modelo').empty().trigger('change').prop('disabled', true);
     });
     
     $("#producto").off("change").change(function(){
-        const container = document.getElementById('otroDispositivoContainer');
-        $("#otroDispositivoContainer").addClass("d-none");
-        container.innerHTML = '';
-        if (this.value == 9) { // Si el valor es "Otro"
-            $("#otroDispositivoContainer").removeClass("d-none");
-            container.innerHTML = `
-                <label for="otroProducto" class="form-label">Especifique el dispositivo<span class="required">*</span></label>
-                <input type="text" class="form-control" id="otroProducto" placeholder="Ingrese el dispositivo" required>
-                <div class="invalid-feedback">Por favor ingrese el dispositivo</div>
-            `;
+        let productoId = $(this).val();
+        if (productoId) {
+            cargarSelector("marca", productoId, "/marca/producto", 'Seleccione una Marca');
+            $('#marca').prop('disabled', false);
+        } else {
+            $('#marca').empty().trigger('change').prop('disabled', true);
+            $('#modelo').empty().trigger('change').prop('disabled', true);
+        }
+    });
+
+    $("#marca").off("change").change(function(){
+        let marcaId = $(this).val();
+        let productoId = $("#producto").val();
+        if (marcaId && productoId) {
+            cargarSelector("modelo", { producto: productoId, marca: marcaId }, "/modelo/producto_marca", 'Seleccione un Modelo');
+            $('#modelo').prop('disabled', false);
+        } else {
+            $('#modelo').empty().trigger('change').prop('disabled', true);
         }
     });
 
@@ -446,39 +467,26 @@ function openAddModal() {
 
 function cargarSelector(selectorId, dataId, url, placeholder) {
     $.ajax({
-        url:  URL_BACKEND + url,
+        url: URL_BACKEND + url,
         type: 'GET',
-        data: { id: dataId },
+        data: typeof dataId === "object" ? dataId : { id: dataId },
         success: function(respuesta) {
-            $('#' + selectorId).empty();
-            console.log(respuesta)
-            respuesta = respuesta["data"]
-            if (respuesta.length){
-                if (respuesta.length > 1){
-                    $('#' + selectorId).append($('<option>', {
-                        value: '',
-                        text: placeholder,
-                        disabled: true,
-                        selected: true
-                    }));
+            let $select = $('#' + selectorId);
+            $select.empty();
+            respuesta = respuesta["data"];
+
+            if (respuesta.length) {
+                if (respuesta.length > 1) {
+                    $select.append(new Option(placeholder, '', true, false)).prop('disabled', false);
                 }
                 $.each(respuesta, function(i, item) {
-                    var optionData = {
-                        value: item.id,
-                        text: item.nombre
-                    };
-                    $('#' + selectorId).append($('<option>', optionData));
+                    $select.append(new Option(item.nombre, item.id, false, false));
                 });
-                if (respuesta.length == 1)
-                    $('#' + selectorId).trigger('change');
-            }else{
-                $('#' + selectorId).append($('<option>', {
-                    value: '',
-                    text: 'No existe data disponible',
-                    disabled: true,  // Hacer que el placeholder no sea seleccionable
-                    selected: true   // Hacer que el placeholder sea la opción seleccionada inicialmente
-                }));
+            } else {
+                $select.append(new Option('No existe data disponible', '', true, true)).prop('disabled', true);
             }
+
+            $select.trigger('change');
         },
         error: function() {
             toastr.warning("información no encontrada", "Error");
