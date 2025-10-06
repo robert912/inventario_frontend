@@ -13,6 +13,7 @@ $.ajaxSetup({
     beforeSend: function (xhr, settings) {
         xhr.setRequestHeader("Authorization", token);
         xhr.setRequestHeader("idUsuario", data_usuario['id_usuario']);
+        xhr.setRequestHeader("idDepartamento", data_departamento['id']);
         if (sessionStorage.getItem('access_token') == null || sessionStorage.getItem('session_expirate') == null) {
             redirect_cierre_sesion(URL_LOGIN);
         } else {
@@ -168,7 +169,7 @@ function loadMenu() {
                 var classOpen = ""
                 menu_list.html(`
                 <li class="mm-active">
-                    <a href="#/views/dashboard/index" onclick="goURL('/views/dashboard/index');"><i class="fa fa-house-door"></i><span class="nav-text">Dashboard</span></a>
+                    <a href="#/views/dashboard/index" onclick="goURL('/views/dashboard/index');"><i class="bi bi-house-fill"></i><span class="nav-text">Dashboard</span></a>
                 </li>
                 `);
 

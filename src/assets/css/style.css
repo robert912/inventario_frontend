@@ -38038,3 +38038,15 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
       color: rgba(255, 255, 255, 0.7); }
 
 /*# sourceMappingURL=style.css.map */
+
+[data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu > li.mm-active > a i {
+    color: var(--primary);
+}
+
+[data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu > li:hover > a i {
+    color: var(--primary-dark);
+}
+
+.deznav {
+    box-shadow: 0rem 0.5375rem 0.475rem 0rem rgba(0, 0, 0, 0.08);
+}

@@ -1,0 +1,70 @@
+<!-- Modal Agregar Cliente-->
+<div class="modal fade" id="modalAgregarProducto" tabindex="-1" role="dialog" aria-labelledby="modalAgregarProducto">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="tituloModal">Agregar nuevo Equipo</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="row">
+						<div class="col-lg-6 mb-2">
+							<div class="form-group">
+								<label for="categoria" class="col-form-label">Tipo Equipo:<span class="required">*</span></label>
+								<input type="text" id="categoria" class="form-control valid text-capitalize" placeholder="categoria" autocomplete="off">
+								<div class="invalid-feedback">Ingrese Tipo de Equipo.</div>
+							</div>
+						</div>
+						<div class="col-lg-6 mb-2">
+							<div class="form-group">
+								<label for="equipo" class="col-form-label">Equipo:</label>
+								<input type="text" id="equipo" class="form-control text-capitalize" placeholder="Equipo" autocomplete="off">
+							</div>
+						</div>
+						<div class="col-lg-6 mb-2" id="inputProcedimiento">
+							<div class="form-group">
+								<label for="equipoProcedimiento" class="col-form-label">Procedimiento o Normativa:</label>
+								<input type="text" id="equipoProcedimiento" class="form-control" placeholder="Procedimiento para el Equipo" autocomplete="off">
+							</div>
+						</div>
+                        <div class="col-lg-6 mb-2">
+							<div class="form-group">
+								<label for="modeloValor" class="col-form-label">Valor:</label>
+								<input type="number" id="modeloValor" class="form-control" placeholder="Valor Proceso para el Equipo" autocomplete="off" min="0" max="999999">
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label for="marca" class="col-form-label">Marca:</label>
+								<div class="mb-3 mb-0">
+									<div class="form-check custom-checkbox form-check-inline checkbox-info">
+										<input type="radio" class="form-check-input" id="nuevo" name="addMarca" checked>
+										<label class="form-check-label" for="nuevo">Nueva Marca</label>
+									</div>
+									<div class="form-check custom-checkbox form-check-inline checkbox-info">
+										<input type="radio" class="form-check-input" id="existente" name="addMarca">
+										<label class="form-check-label" for="existente">Marca Existente</label>
+									</div>
+									<div id="marcaContainer">
+										<input type="text" id="marca" class="form-control text-capitalize" placeholder="Marca del Equipo" autocomplete="off">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6 mb-2">
+							<div class="form-group">
+								<label for="modelo" class="col-form-label">Modelo:</label>
+								<input type="text" id="modelo" class="form-control text-capitalize" placeholder="Modelo" autocomplete="off">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+				<button id="submitFormEquipo" type="button" class="btn btn-primary">Registrar</button>
+			</div>
+		</div>
+	</div>
+</div>

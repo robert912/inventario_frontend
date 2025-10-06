@@ -8,13 +8,14 @@
 			<div class="d-flex justify-content-between align-items-center">
 				<div>
 					<h1 class="h3 mb-0">
-						<i class="fas fa-laptop text-primary me-2"></i>
-						Inventario de Dispositivos
+						<i class="bi bi-box-seam text-primary me-2"></i>
+						Inventario de Productos
 					</h1>
 					<p class="text-muted mb-0">Gestión completa de equipos y dispositivos</p>
 				</div>
+                <button id="generatePdf" class="btn btn-info mb-3">Generar PDF</button>
 				<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deviceModal" onclick="openAddModal()">
-					<i class="fas fa-plus me-2"></i>Agregar Dispositivo
+					<i class="fas fa-plus me-2"></i>Asignar Producto
 				</button>
 			</div>
 		</div>
@@ -96,46 +97,45 @@
 				<div class="card-body p-2">
 					<div class="table-responsive active-projects shorting">
 					
-						<div class="tbl-caption d-flex justify-content-between">
+						<div class="tbl-caption d-flex justify-content-between p-2">
 							<h4 class="heading mb-0"><i class="fas fa-table me-2"></i>Lista de Dispositivos</h4>
 
 						</div>
-						<table id="tablaEstadoEquipos" class="table display" cellspacing="0" width="100%">
-							<thead>
-								<tr>
-								  	<th>ID</th>
-									<th>Marca</th>
-									<th>Modelo</th>
-									<th>N° Serie</th>
-									<th>Categoría</th>
-									<th>Estado</th>
-									<th>Ubicación</th>
-									<th>Responsable</th>
-									<th>Fecha Ingreso</th>
-									<th>Precio</th>
-									<th>Archivos</th>
-								  	<th style="width: 5rem">Acciones</th>
-								</tr>
-								<tr>
-								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-id" name="id" style="width: 100%; min-width: 60px;" autocomplete="off"></th>
-								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-cliente" name="cliente" style="width: 100%;" autocomplete="off"></th>
-								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-equipo" name="equipo" style="width: 100%;" autocomplete="off"></th>
-								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-marca" name="marca" style="width: 100%;" autocomplete="off"></th>
-								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-modelo" name="modelo" style="width: 100%;" autocomplete="off"></th>
-								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-serie" name="serie" style="width: 100%;" autocomplete="off"></th>
-								  <th style="width: 100%; min-width: 90px; max-width: 120px;"></th>
-								  <th class="search-change sorting_disabled p-1" style="width: 120px; min-width: 120px; max-width: 120px;">
-									<select class="form-select form-select-sm" id="select-estado" name="estado" style="width: 100%;"></select>
-								  </th>
-								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-certificado" name="certificado" style="width: 100%;" autocomplete="off"></th>
-								  <th><input type="text" aria-hidden="true" style="position: absolute; top: -1000px;" ><!--Se Agregar este input para evitar el autocompletado flotante--></th>
-								  <th></th>
-								  <th></th>
-								  <!--<th class="search-change sorting_disabled p-1"><input type="search" id="search-fecha_ingreso" name="fecha_ingreso" style="width: 100%;" autocomplete="off"></th>
-								  <th class="search-change sorting_disabled p-1"><input type="search" id="search-fecha_termino" name="fecha_termino" style="width: 100%;" autocomplete="off"></th>-->
-								</tr>
-							</thead>
-						</table>
+                            <table id="tablaInventarioProductos" class="table display" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th>N° Serie</th>
+                                        <th>Categoría</th>
+                                        <th>Estado</th>
+                                        <th>Ubicación</th>
+                                        <th>Responsable</th>
+                                        <th>Tipo Adquisición</th>
+                                        <th>N° Documento</th>
+                                        <th>Código Usach</th>
+                                        <th>Fecha Ingreso</th>
+                                        <th style="width: 5rem">Acciones</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-producto" name="producto" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-marca" name="marca" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-modelo" name="modelo" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-serie" name="serie" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-categoria" name="categoria" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-estado" name="estado" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-ubicacion" name="ubicacion" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-responsable" name="responsable" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-tipo-adquisicion" name="tipo_adquisicion" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-nro-documento" name="nro_documento" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-codigo-usach" name="codigo_usach" style="width: 100%;" autocomplete="off"></th>
+                                        <th><input type="text" style="position: absolute; top: -1000px;" ><!--Se Agregar este input para evitar el autocompletado flotante--></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+
 					</div>
 				</div>
 			</div>
@@ -150,7 +150,7 @@ Modal para Agregar/Editar Dispositivo
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle">Agregar Dispositivo</h5>
+                        <h5 class="modal-title" id="modalTitle">Asignar Dispositivo</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -216,7 +216,7 @@ Modal para Agregar/Editar Dispositivo
                                 </div>
                                 <div class="col-md-4">
                                     <label for="responsable" class="form-label">Responsable *</label>
-                                    <input type="text" class="form-control" id="responsable" required>
+                                    <select class="form-select form-control" id="responsable" required></select>
                                     <div class="invalid-feedback">Por favor ingrese el responsable</div>
                                 </div>
                                 <div class="col-md-4">
@@ -226,7 +226,7 @@ Modal para Agregar/Editar Dispositivo
                                 </div>
                                 <div class="col-md-4">
                                     <label for="adquisicion" class="form-label">Forma Adquisición*</label>
-                                    <select class="form-select form-control" id="adquisicion" required placeholder="Ej: SDT, Proyecto, USACH"></select>
+                                    <select class="form-select form-control" id="adquisicion" required placeholder="Ej: SDT, Proyecto, USACH, Donado, Prestamo"></select>
                                     <div class="invalid-feedback">Por favor ingrese forma de Adquisición</div>
                                 </div>
                                 <div class="col-md-4">
@@ -246,7 +246,7 @@ Modal para Agregar/Editar Dispositivo
                                 </div>
                                 <div class="col-md-4">
                                     <label for="metodoCompra" class="form-label">Boleta o Factura</label>
-                                    <input type="text" class="form-control" id="metodoCompra">
+                                    <input type="text" class="form-control" id="metodoCompra" placeholder="Ej: Factura o Boleta N°12345">
                                 </div>
                                 <div class="col-12">
                                     <label for="observaciones" class="form-label">Observaciones</label>
@@ -274,7 +274,7 @@ Modal para Agregar/Editar Dispositivo
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             <i class="fas fa-times me-2"></i>Cancelar
                         </button>
-                        <button type="button" class="btn btn-primary" onclick="saveDevice()">
+                        <button type="button" class="btn btn-primary" onclick="guardarDispositivo()">
                             <i class="fas fa-save me-2"></i>Guardar
                         </button>
                     </div>

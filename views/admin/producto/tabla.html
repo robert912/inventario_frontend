@@ -1,0 +1,99 @@
+
+<!-- Pestañas -->
+<div class="row">
+	<div class="col-xl-12 col-xxl-12">
+		<div class="card">
+			<div class="card-header">
+				<h4 class="card-title">Administrar Equipos</h4>
+			</div>
+			<div class="card-body">
+				<div class="tab-content">
+
+					<div id="div_seccion_tabla" class="">
+
+						<section id="seccion_tabla_categoria" class="collapse show" data-bs-parent="#div_seccion_tabla">
+
+							<div class="card-content seccion_tabla">
+								<div class="card-body overflow-auto">
+									<div class="table-responsive active-projects shorting">
+										<div class="tbl-caption d-flex justify-content-between p-0 pb-4">
+											<h4 class="heading mb-0">Tipo de Equipos</h4>
+											<button id="btnTipoAdd" class="btn light btn-primary openModalBtn" type="button">Agregar Categoria</button>
+										</div>
+										<table id="tabla_categoria" class="table display" cellspacing="0" width="100%">
+										</table>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<section id="seccion_tabla_equipo" class="collapse" data-bs-parent="#div_seccion_tabla">
+
+							<div class="card-content seccion_tabla ">
+								<div class="card-body overflow-auto">
+									<div class="table-responsive active-projects shorting">
+										<div class="tbl-caption d-flex justify-content-between p-0 pb-4">
+											<h4 id="titulo_tabla_tipo" class="heading mb-0 text-capitalize">Administrar Equipos</h4>
+											<div>
+												<button href="#" type="button" class="btn light btn-danger mr-1" data-bs-toggle="collapse" data-bs-target="#seccion_tabla_categoria" aria-expanded="true" aria-controls="seccion_tabla_categoria">Volver</button>
+												<button id="btnEquipoAdd" class="btn light btn-primary openModalBtn" type="button">Agregar Equipo</button>
+											</div>
+										</div>
+										<table id="tabla_equipo" class="table display" cellspacing="0" width="100%">
+										</table>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<section id="seccion_tabla_marca" class="collapse" data-bs-parent="#div_seccion_tabla">
+
+							<div class="card-content seccion_tabla ">
+								<div class="card-body overflow-auto">
+									<div class="table-responsive active-projects shorting">
+										<div class="tbl-caption d-flex justify-content-between p-0 pb-4">
+											<h4 id="titulo_tabla_equipo" class="heading mb-0 text-capitalize">Administrar Equipos</h4>
+											<div>
+												<button href="#" type="button" class="btn light btn-danger mr-1" data-bs-toggle="collapse" data-bs-target="#seccion_tabla_equipo" aria-expanded="true" aria-controls="seccion_tabla_equipo">Volver</button>
+												<button id="btnMarcaAdd" class="btn light btn-primary openModalBtn" type="button">Agregar Marca</button>
+											</div>
+										</div>
+										<table id="tabla_marca" class="table display" cellspacing="0" width="100%">
+										</table>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<section id="seccion_tabla_modelo" class="collapse" data-bs-parent="#div_seccion_tabla">
+
+							<div class="card-content seccion_tabla ">
+								<div class="card-body overflow-auto">
+									<div class="table-responsive active-projects shorting">
+										<div class="tbl-caption d-flex justify-content-between p-0 pb-4">
+											<h4 id="titulo_tabla_marca" class="heading mb-0 text-capitalize">Administrar Equipos</h4>
+											<div>	
+												<button href="#" type="button" class="btn light btn-danger btn-min-width mr-1" data-bs-toggle="collapse" data-bs-target="#seccion_tabla_marca" aria-expanded="true" aria-controls="seccion_tabla_marca">Volver</button>
+												<button id="btnModeloAdd" class="btn light btn-primary openModalBtn" type="button">Agregar Modelo</button>
+											</div>
+										</div>
+										<table id="tabla_modelo" class="table display" cellspacing="0" width="100%">
+										</table>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal Agregar Equipo-->
+<div id="modalContainer"></div>
+
+
+<script>
+    $('#full-layout').append("<script type='text/javascript' src='/src/js_files/admin/producto/producto.js?v=" + VERSION_JS + "'><\/script>");
+</script>
