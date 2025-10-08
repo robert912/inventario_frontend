@@ -146,7 +146,7 @@ $('#div_seccion_tabla').on('click', 'a.enable-disable', function () {
         estado: data_row['estado'] ? 0 : 1
     }
     if (tablaId == 'tabla_marca'){
-        datos["id_equipo"] = data_row['id_equipo'];
+        datos["id_producto"] = data_row['id_equipo'];
         datos["id_marca"] = data_row['id_marca'];
     }
     Swal.fire({
@@ -251,7 +251,7 @@ function modalProducto(selectorId, data){
                 $('#modeloValor').val(equipo['tabla_equipo']['valor']).prop('disabled', true);
                 $('#equipoProcedimiento').val(equipo['tabla_equipo']['procedimiento']).prop('disabled', true);
                 $("#marca").addClass('valid');
-                datos['id_equipo'] = data_table[selectorId]['dataId'];
+                datos['id_producto'] = data_table[selectorId]['dataId'];
                 etiquetaInput = 'marca';
                 if (typeof data != 'undefined') {
                     $("#tituloModal").text("Editar Marca");
@@ -290,6 +290,7 @@ function modalProducto(selectorId, data){
                     if ($("#nuevo").is(':checked')) {
                         datos['nombre'] = $("#"+etiquetaInput).val()
                     } else {
+                        //datos['nombre'] = $("#"+etiquetaInput).val()
                         datos['id_marca'] = parseInt($("#"+etiquetaInput).val())
                     }
                 }
@@ -335,7 +336,17 @@ function modalProducto(selectorId, data){
         $('input[type=radio][name=addMarca]').change(function() {
             if (this.id === 'existente') { // Si se selecciona Marca Existente
                 $('#marcaContainer').html('<select id="marca" class="form-control text-capitalize valid" ></select>');
-                cargarSelector("marca", data_table[selectorId]['dataId'], '/marca/allbyequipodistinct');
+                cargarSelector("marca", data_table[selectorId]['dataId'], '/marca/allbyequipodistinct', 'Seleccione una marca');
+                // Inicializo Select2 después de cargar el modal
+                setTimeout(() => {
+                    $("#marca").select2({
+                        dropdownParent: $("#modalAgregarProducto"), // importante para que funcione dentro del modal
+                        tags: true, // permite agregar nuevos valores
+                        placeholder: "Escriba o seleccione una opción",
+                        allowClear: true,
+                        width: "100%"
+                    });
+                }, 300);
             } else { // Si se selecciona Nueva Marca
                 $('#marcaContainer').html('<input type="text" id="marca" class="form-control text-capitalize valid" placeholder="Marca del Equipo" autocomplete="off">');
             }
@@ -354,39 +365,28 @@ function modalProducto(selectorId, data){
     });
 }
 
-function cargarSelector(selectorId, dataId, url) {
+function cargarSelector(selectorId, dataId, url, placeholder) {
     $.ajax({
-        url:  URL_BACKEND + url,
+        url: URL_BACKEND + url,
         type: 'GET',
-        data: { id: dataId },
+        data: typeof dataId === "object" ? dataId : { id: dataId },
         success: function(respuesta) {
-            $('#' + selectorId).empty();
-            respuesta = respuesta["data"]
-            if (respuesta.length){
-                if (respuesta.length > 1){
-                    $('#' + selectorId).append($('<option>', {
-                        value: '',
-                        text: 'Seleccione una opción',
-                        disabled: true,
-                        selected: true
-                    }));
+            let $select = $('#' + selectorId);
+            $select.empty();
+            respuesta = respuesta["data"];
+
+            if (respuesta.length) {
+                if (respuesta.length > 1) {
+                    $select.append(new Option(placeholder, '', true, false)).prop('disabled', false);
                 }
                 $.each(respuesta, function(i, item) {
-                    $('#' + selectorId).append($('<option>', {
-                        value: item.id,
-                        text : item.nombre
-                    }));
+                    $select.append(new Option(item.nombre, item.id, false, false));
                 });
-                if (respuesta.length == 1)
-                    $('#' + selectorId).trigger('change');
-            }else{
-                $('#' + selectorId).append($('<option>', {
-                    value: '',
-                    text: 'No existe data disponible',
-                    disabled: true,
-                    selected: true 
-                }));
+            } else {
+                $select.append(new Option('No existe data disponible', '', true, true)).prop('disabled', true);
             }
+
+            $select.trigger('change');
         },
         error: function() {
             toastr.warning("información no encontrada", "Error");
