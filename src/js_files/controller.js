@@ -187,7 +187,7 @@ function loadMenu() {
                             }
                             let textLi = datasub.name;
 
-                            html = html + '<li class="submenu-item '+classActive+'"><a href="#' + datasub.url + '" onclick="goURL(\'' + datasub.url + '\');"  class=""><i class="' + datasub.icon + '"></i>' + textLi + '</a></li>'
+                            html = html + '<li class="submenu-item '+classActive+'"><a href="#' + datasub.url + '" onclick="goURL(\'' + datasub.url + '\');"  class=""><i class="' + datasub.icon + ' pe-2"></i>' + textLi + '</a></li>'
                             classActive = "";
                         })
                         html = html + '</ul></li>'

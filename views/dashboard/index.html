@@ -1,291 +1,59 @@
 <div class="container-fluid">
-
-	<!--**********************************
+    <link href="views/dashboard/dashboard.css" rel="stylesheet">
+    <!--**********************************
 		Ecabezado del Dashboard
 	***********************************-->
-	<div class="row mb-4">
-		<div class="col-12">
-			<div class="d-flex justify-content-between align-items-center">
-				<div>
-					<h1 class="h3 mb-0">
-						<i class="bi bi-box-seam text-primary me-2"></i>
-						Inventario de Productos
-					</h1>
-					<p class="text-muted mb-0">Gestión completa de equipos y dispositivos</p>
-				</div>
-                <button id="generatePdf" class="btn btn-info mb-3">Generar PDF</button>
-				<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deviceModal" onclick="openAddModal()">
-					<i class="fas fa-plus me-2"></i>Asignar Producto
-				</button>
-			</div>
-		</div>
-	</div>
-
-	<div class="row">
-<!--**********************************
-			Inicio Targeta de estados
-	***********************************-->
-		<div class="col-xl-3 col-6">
-			<div class="card box-hover">
-				<div class="card-body bg-success-light">
-					<div class="d-flex align-items-center">
-						<div class="icon-box icon-box-lg text-success bg-success-light rounded-circle">
-							<i class="bi bi-card-checklist fa-3x"></i>
-						</div>
-						<div class="total-projects ms-3">
-							<h3 id="totalDevices" class="text-success count">0</h3>
-							<span>Total Dispositivos</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-3 col-6">
-			<div class="card box-hover">
-				<div class="card-body bg-purple-light">
-					<div class="d-flex align-items-center">
-						<div class="icon-box icon-box-lg text-purple bg-purple-light rounded-circle">
-							<i class="bi bi-box-seam fa-3x"></i>
-						</div>
-						<div class="total-projects ms-3">
-							<h3 id="total_espera" class="text-purple count">0</h3> 
-							<span>Total En Espera</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-3 col-6">
-			<div class="card box-hover">
-				<div class="card-body bg-dark-light">
-					<div class="d-flex align-items-center">
-						<div class="icon-box icon-box-lg text-dark bg-dark-light rounded-circle">
-							<i class="bi bi-pause-circle fa-3x"></i>
-						</div>
-						<div class="total-projects ms-3">
-							<h3 id="total_pausa" class="text-dark count">0</h3>
-							<span>Total En Pausa</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-3 col-6 tarjeta_cancelado ">
-			<div class="card box-hover">
-				<div class="card-body bg-danger-light">
-					<div class="d-flex align-items-center">
-						<div class="icon-box icon-box-lg text-danger bg-danger-light rounded-circle">
-							<i class="bi bi-shield-x fa-3x"></i>
-						</div>
-						<div class="total-projects ms-3">
-							<h3 id="total_cancelado" class="text-danger count">0</h3> 
-							<span>Total Cancelados</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	<!--**********************************
-			Fin Targeta de estados
-	***********************************-->
-
-	<!--**********************************
-			Inicio Tabla Estado Equipos
-	***********************************-->
-		<div class="col-12 active-p">
-			<div class="card">
-				<div class="card-body p-2">
-					<div class="table-responsive active-projects shorting">
-					
-						<div class="tbl-caption d-flex justify-content-between p-2">
-							<h4 class="heading mb-0"><i class="fas fa-table me-2"></i>Lista de Dispositivos</h4>
-
-						</div>
-                            <table id="tablaInventarioProductos" class="table display" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Producto</th>
-                                        <th>Marca</th>
-                                        <th>Modelo</th>
-                                        <th>N° Serie</th>
-                                        <th>Categoría</th>
-                                        <th>Estado</th>
-                                        <th>Ubicación</th>
-                                        <th>Responsable</th>
-                                        <th>Tipo Adquisición</th>
-                                        <th>N° Documento</th>
-                                        <th>Código Usach</th>
-                                        <th>Fecha Ingreso</th>
-                                        <th style="width: 5rem">Acciones</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-producto" name="producto" style="width: 100%;" autocomplete="off"></th>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-marca" name="marca" style="width: 100%;" autocomplete="off"></th>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-modelo" name="modelo" style="width: 100%;" autocomplete="off"></th>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-serie" name="serie" style="width: 100%;" autocomplete="off"></th>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-categoria" name="categoria" style="width: 100%;" autocomplete="off"></th>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-estado" name="estado" style="width: 100%;" autocomplete="off"></th>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-ubicacion" name="ubicacion" style="width: 100%;" autocomplete="off"></th>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-responsable" name="responsable" style="width: 100%;" autocomplete="off"></th>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-tipo-adquisicion" name="tipo_adquisicion" style="width: 100%;" autocomplete="off"></th>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-nro-documento" name="nro_documento" style="width: 100%;" autocomplete="off"></th>
-                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-codigo-usach" name="codigo_usach" style="width: 100%;" autocomplete="off"></th>
-                                        <th><input type="text" style="position: absolute; top: -1000px;" ><!--Se Agregar este input para evitar el autocompletado flotante--></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                            </table>
-
-					</div>
-				</div>
-			</div>
-		</div>
-<!--**********************************
-		Fin Tabla Estado Equipos
-***********************************-->
-<!--**********************************
-Modal para Agregar/Editar Dispositivo
-***********************************-->
-        <div class="modal fade" id="deviceModal" tabindex="-1" data-bs-backdrop="static">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle">Asignar Dispositivo</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="deviceForm" novalidate>
-                            <input type="hidden" id="deviceId">
-                            
-                            <!-- Información Básica -->
-                            <div class="row mb-4">
-                                <div class="col-12">
-                                    <h6 class="text-primary border-bottom pb-2">
-                                        <i class="fas fa-info-circle me-2"></i>Información Básica
-                                    </h6>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="categoria" class="form-label">Categoría *</label>
-                                    <select class="form-select form-control" id="categoria" required>
-                                    </select>
-                                    <div class="invalid-feedback">Por favor seleccione una categoría</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="producto" class="form-label">Dispositivo<span class="required">*</span></label>
-                                    <select class="form-select form-control" id="producto" required>
-                                    </select>
-                                    <div class="invalid-feedback">Por favor ingrese el Dispositivo</div>
-                                </div>
-                                <div class="col-md-4 d-none" id="otroDispositivoContainer"></div>
-
-                                <div class="col-md-4">
-                                    <label for="marca" class="form-label">Marca *</label>
-                                    <select class="form-select form-control" id="marca" required></select>
-                                    <div class="invalid-feedback">Por favor ingrese la marca</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="modelo" class="form-label">Modelo *</label>
-                                    <select class="form-select form-control" id="modelo" required></select>
-                                    <div class="invalid-feedback">Por favor seleccione o ingrese el modelo</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="serie" class="form-label">Número de Serie *</label>
-                                    <input type="text" class="form-control" id="serie" required>
-                                    <div class="invalid-feedback">Por favor ingrese el número de serie</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="invetario" class="form-label">Número Inventario (si aplica)</label>
-                                    <input type="text" class="form-control" id="invetario" required>
-                                    <div class="invalid-feedback">Por favor ingrese el número de serie</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="estado" class="form-label">Estado *</label>
-                                    <select class="form-select form-control" id="estado" required>
-                                    </select>
-                                    <div class="invalid-feedback">Por favor seleccione un estado</div>
-                                </div>
-                                
-                            </div>
-
-                            <!-- Información Adicional -->
-                            <div class="row mb-4">
-                                <div class="col-12">
-                                    <h6 class="text-primary border-bottom pb-2">
-                                        <i class="fas fa-user-cog me-2"></i>Información Adicional
-                                    </h6>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="responsable" class="form-label">Responsable *</label>
-                                    <select class="form-select form-control" id="responsable" required></select>
-                                    <div class="invalid-feedback">Por favor ingrese el responsable</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="ubicacion" class="form-label">Ubicación *</label>
-                                    <select class="form-select form-control" id="ubicacion" required placeholder="Ej: Oficina Principal - Piso 2"></select>
-                                    <div class="invalid-feedback">Por favor ingrese la ubicación</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="adquisicion" class="form-label">Forma Adquisición*</label>
-                                    <select class="form-select form-control" id="adquisicion" required placeholder="Ej: SDT, Proyecto, USACH, Donado, Prestamo"></select>
-                                    <div class="invalid-feedback">Por favor ingrese forma de Adquisición</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="fechaIngreso" class="form-label">Fecha de Ingreso *</label>
-                                    <input type="date" class="form-control" id="fechaIngreso" required>
-                                    <div class="invalid-feedback">Por favor seleccione la fecha de ingreso</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="fechaCompra" class="form-label">Fecha de Compra</label>
-                                    <input type="date" class="form-control" id="fechaCompra">
-                                    <div class="invalid-feedback">Por favor seleccione la fecha de Compra</div>
-                                </div>
-                                <div class="col-md-4 d-none" id="divBaja">
-                                    <label for="fechaBaja" class="form-label">Fecha de Baja</label>
-                                    <input type="date" class="form-control" id="fechaBaja">
-                                    <div class="invalid-feedback">Por favor seleccione la fecha de Baja</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="metodoCompra" class="form-label">Boleta o Factura</label>
-                                    <input type="text" class="form-control" id="metodoCompra" placeholder="Ej: Factura o Boleta N°12345">
-                                </div>
-                                <div class="col-12">
-                                    <label for="observaciones" class="form-label">Observaciones</label>
-                                    <textarea class="form-control" id="observaciones" rows="3"></textarea>
-                                </div>
-                            </div>
-
-                            <!-- Archivos -->
-                            <div class="row mb-4">
-                                <div class="col-12">
-                                    <h6 class="text-primary border-bottom pb-2">
-                                        <i class="fas fa-paperclip me-2"></i>Archivos Adjuntos
-                                    </h6>
-                                </div>
-                                <div class="col-12">
-                                    <label for="archivos" class="form-label">Documentos e Imágenes</label>
-                                    <input type="file" class="form-control" id="archivos" multiple accept="image/*,.pdf,.doc,.docx,.txt">
-                                    <div class="form-text">Puedes subir imágenes (JPG, PNG), PDFs y documentos de Word. Máximo 10MB por archivo.</div>
-                                    <div id="archivosList" class="mt-3"></div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="fas fa-times me-2"></i>Cancelar
-                        </button>
-                        <button type="button" class="btn btn-primary" onclick="guardarDispositivo()">
-                            <i class="fas fa-save me-2"></i>Guardar
-                        </button>
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-md-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 page-title">
+                        <i class="bi bi-box-seam text-primary me-2"></i>
+                        Catálogo de Productos
+                    </h1>
+                    <p class="text-muted mb-0">Gestiona y solicita productos del inventario</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-2">
+                    <div class="product-count">
+                        <i class="fas fa-box fa-2x"></i>
+                        <span id="productCount">6 productos</span>
                     </div>
                 </div>
             </div>
         </div>
-<!--**********************************
-Fin Modal para Agregar/Editar Dispositivo
-***********************************-->
+    </div>
 
-	</div>
+    <div class="row">
+        <div class="search-section">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="form-control search-input" id="searchInput"
+                            placeholder="Buscar productos por nombre, marca, modelo o SKU...">
+                        <input type="text"
+                            style="position: absolute; top: -1000px;"><!--Se Agregar este input para evitar el autocompletado flotante-->
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select category-select" id="categoryFilter">
+                        <option value="">Todas las categorías</option>
+                        <option value="electronica">Electrónica</option>
+                        <option value="mobiliario">Mobiliario</option>
+                        <option value="oficina">Oficina</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Los productos se cargarán dinámicamente aquí -->
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                <p>Cargando catálogo...</p>
+            </div>
+        </div>
+    </div>
 </div>
 <!--**********************************
 Modal Imprimir id calibracion
@@ -294,5 +62,5 @@ Modal Imprimir id calibracion
 
 <script>
     $('#full-layout').append("<script type='text/javascript' src='src/js_files/dashboard/index.js?v=" + VERSION_JS + "'><\/script>");
-	//$('#full-layout').append("<script type='text/javascript' src='/js_files/dashboard/reingreso.js?v=" + VERSION_JS + "'><\/script>");
+    //$('#full-layout').append("<script type='text/javascript' src='/js_files/dashboard/reingreso.js?v=" + VERSION_JS + "'><\/script>");
 </script>

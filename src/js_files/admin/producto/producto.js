@@ -1,37 +1,37 @@
 var tablas = {};
 var equipo = {};
-var data_table = {  'tabla_categoria':{'selectorId':"tabla_categoria", 'dataId':null,'url':"/categoria/all", 'sigTabla':"tabla_equipo", "urlEnable":"/categoria/activar", "urlInsert":"/categoria/insert"},
-                    'tabla_equipo':{'selectorId':"tabla_equipo", 'dataId':null, 'url':"/productos/categoria", 'sigTabla':"tabla_marca", "urlEnable":"/producto/activar", "urlInsert":"/producto/insert"},
+var data_table = {  'tabla_categoria':{'selectorId':"tabla_categoria", 'dataId':null,'url':"/categoria/all", 'sigTabla':"tabla_producto", "urlEnable":"/categoria/activar", "urlInsert":"/categoria/insert"},
+                    'tabla_producto':{'selectorId':"tabla_producto", 'dataId':null, 'url':"/productos/categoria", 'sigTabla':"tabla_marca", "urlEnable":"/producto/activar", "urlInsert":"/producto/insert"},
                     'tabla_marca':{'selectorId':"tabla_marca", 'dataId':null, 'url':"/marca/producto", 'sigTabla':"tabla_modelo", "urlEnable":"/marcaEquipo/activar", "urlInsert":"/marca/insert"},
                     'tabla_modelo':{'selectorId':"tabla_modelo", 'dataId':null, 'url':"/modelo/producto_marca", 'sigTabla':null, "urlEnable":"/modelo/activar", "urlInsert":"/modelo/insert"}}
 
 $(document).ready(function() {
-    cargarTabla("tabla_categoria", null, "/categoria/all", "tabla_equipo");
+    cargarTabla("tabla_categoria", null, "/categoria/all", "tabla_producto");
     
     $("#tabla_categoria").on('click', 'button.ver_equipo', function () {
         equipo['tabla_categoria'] = data_row = tablas['tabla_categoria'].row($(this).parents('tr')).data();
-        cargarSiguienteTabla("tabla_equipo", data_table["tabla_equipo"]['dataId'] = data_row['id'], "/productos/categoria", "tabla_marca");
+        cargarSiguienteTabla("tabla_producto", data_table["tabla_producto"]['dataId'] = data_row['id'], "/productos/categoria", "tabla_marca");
         $("#titulo_tabla_tipo").html(equipo['tabla_categoria']['nombre'])
     });
 
-    $("#tabla_equipo").on('click', 'button.ver_equipo', function () {
-        equipo['tabla_equipo'] = data_row = tablas['tabla_equipo'].row($(this).parents('tr')).data();
+    $("#tabla_producto").on('click', 'button.ver_equipo', function () {
+        equipo['tabla_producto'] = data_row = tablas['tabla_producto'].row($(this).parents('tr')).data();
         cargarSiguienteTabla("tabla_marca", data_table["tabla_marca"]['dataId'] = data_row['id'], "/marca/producto", "tabla_modelo");
-        $("#titulo_tabla_equipo").html(equipo['tabla_categoria']['nombre'] + ' <i class="bi bi-arrow-right"></i> ' + equipo['tabla_equipo']['nombre'])
+        $("#titulo_tabla_equipo").html(equipo['tabla_categoria']['nombre'] + ' <i class="bi bi-arrow-right"></i> ' + equipo['tabla_producto']['nombre'])
     });
 
     $("#tabla_marca").on('click', 'button.ver_equipo', function () {
         equipo['tabla_marca'] = data_row = tablas['tabla_marca'].row($(this).parents('tr')).data();
         cargarSiguienteTabla("tabla_modelo", data_table["tabla_modelo"]['dataId'] = data_row['id'], "/modelo/producto_marca", null);
-        $("#titulo_tabla_marca").html(equipo['tabla_categoria']['nombre'] + ' <i class="bi bi-arrow-right"></i> ' + equipo['tabla_equipo']['nombre'] + ' <i class="bi bi-arrow-right"></i> ' +equipo['tabla_marca']['nombre'])
+        $("#titulo_tabla_marca").html(equipo['tabla_categoria']['nombre'] + ' <i class="bi bi-arrow-right"></i> ' + equipo['tabla_producto']['nombre'] + ' <i class="bi bi-arrow-right"></i> ' +equipo['tabla_marca']['nombre'])
     });
 
 });
 
 // Función para cargar una tabla
 function cargarTabla(selectorId, dataId, url, sigTabla) {
-    mostrarColumnaValor = selectorId == 'tabla_equipo' ? true : false;
-    mostrarColProcedimiento = selectorId == 'tabla_equipo' ? true : false;
+    //mostrarColumnaValor = selectorId == 'tabla_producto' ? true : false;
+    //mostrarColProcedimiento = selectorId == 'tabla_producto' ? true : false;
     mostrarSigTabla = selectorId != 'tabla_modelo' ? true : false;
     tablas[selectorId] = $('#' + selectorId).DataTable({
         order: [[0, "asc"]],
@@ -53,7 +53,7 @@ function cargarTabla(selectorId, dataId, url, sigTabla) {
                 object_search["draw"] = d.draw;
                 object_search["id"] = dataId;
                 if (selectorId == 'tabla_modelo'){
-                    object_search["producto"] = equipo['tabla_equipo']['id'];
+                    object_search["producto"] = equipo['tabla_producto']['id'];
                     object_search["marca"] = dataId;
                 }
                 return object_search;
@@ -70,22 +70,22 @@ function cargarTabla(selectorId, dataId, url, sigTabla) {
         columns: [
             { title: 'Id', data: 'id' },
             { title: 'Tipo equipo', data: function (element) { return `<span class="text-uppercase">${element['nombre']}</span>` } },
-            {
-                title: 'Valor', data: function (element) {
-                    return 'valor' in element ? `<span>$ ${formatearValorPesos(element['valor'])}</span>` : '' ;
-                },
-                "searchable": false,
-                "orderable": false,
-                visible: mostrarColumnaValor // Aquí controlas la visibilidad de la columna
-            },
-            {
-                title: 'Proced./Norma', data: function (element) {
-                    return mostrarColProcedimiento ? `<span>${element['procedimiento']}</span>` : '' ;
-                },
-                "searchable": false,
-                "orderable": false,
-                visible: mostrarColProcedimiento
-            },
+            // {
+            //     title: 'Valor', data: function (element) {
+            //         return 'valor' in element ? `<span>$ ${formatearValorPesos(element['valor'])}</span>` : '' ;
+            //     },
+            //     "searchable": false,
+            //     "orderable": false,
+            //     visible: mostrarColumnaValor // Aquí controlas la visibilidad de la columna
+            // },
+            // {
+            //     title: 'Proced./Norma', data: function (element) {
+            //         return mostrarColProcedimiento ? `<span>${element['procedimiento']}</span>` : '' ;
+            //     },
+            //     "searchable": false,
+            //     "orderable": false,
+            //     visible: mostrarColProcedimiento
+            // },
             {
                 title: 'Estado', data: function (element) {
                     if (element.estado)
@@ -198,7 +198,7 @@ $('#btnTipoAdd').click(function() {
 });
 
 $('#btnEquipoAdd').click(function() {
-    modalProducto('tabla_equipo');
+    modalProducto('tabla_producto');
 });
 
 $('#btnMarcaAdd').click(function() {
@@ -211,7 +211,7 @@ $('#btnModeloAdd').click(function() {
 
 function modalProducto(selectorId, data){
     // Cargar el modal
-    $('#modalContainer').load('../../views/admin/producto/modal_crear_producto.html', function() {
+    $('#modalContainer').load('../../views/admin/producto/modal_crear_producto.html', async function() {
         var etiquetaInput = '';
         var datos = {}
         switch (selectorId) {
@@ -227,11 +227,11 @@ function modalProducto(selectorId, data){
                     $("#categoria").val(data['nombre']);
                 }
                 break;
-            case 'tabla_equipo':
+            case 'tabla_producto':
                 $('#marca, #modelo').hide();
                 $('#equipoProcedimiento, #modeloValor, label[for="equipoProcedimiento"], label[for="modeloValor"]').hide();
                 $('label[for="marca"], label[for="modelo"], .custom-checkbox').hide();
-                $('#categoria').val(equipo['tabla_categoria']['nombre']).prop('disabled', true);
+                await inicializarSelectCategorias('categoriaContainer', 'modalAgregarProducto', data);
                 $("#equipo").addClass('valid');
                 datos['id_categoria'] = data_table[selectorId]['dataId'];
                 etiquetaInput = 'equipo';
@@ -246,10 +246,11 @@ function modalProducto(selectorId, data){
             case 'tabla_marca':
                 $('#modelo').hide();
                 $('label[for="modelo"]').hide();
-                $('#categoria').val(equipo['tabla_categoria']['nombre']).prop('disabled', true);
-                $('#equipo').val(equipo['tabla_equipo']['nombre']).prop('disabled', true);
-                $('#modeloValor').val(equipo['tabla_equipo']['valor']).prop('disabled', true);
-                $('#equipoProcedimiento').val(equipo['tabla_equipo']['procedimiento']).prop('disabled', true);
+                await inicializarSelectCategorias('categoriaContainer', 'modalAgregarProducto', equipo['tabla_producto']);
+                $('#categoria').prop('disabled', true);
+                $('#equipo').val(equipo['tabla_producto']['nombre']).prop('disabled', true);
+                $('#modeloValor').val(equipo['tabla_producto']['valor']).prop('disabled', true);
+                $('#equipoProcedimiento').val(equipo['tabla_producto']['procedimiento']).prop('disabled', true);
                 $("#marca").addClass('valid');
                 datos['id_producto'] = data_table[selectorId]['dataId'];
                 etiquetaInput = 'marca';
@@ -262,13 +263,14 @@ function modalProducto(selectorId, data){
                 break;
             case 'tabla_modelo':
                 $('.custom-checkbox').hide();
-                $('#categoria').val(equipo['tabla_categoria']['nombre']).prop('disabled', true);
-                $('#equipo').val(equipo['tabla_equipo']['nombre']).prop('disabled', true);
-                $('#modeloValor').val(equipo['tabla_equipo']['valor']).prop('disabled', true);
-                $('#equipoProcedimiento').val(equipo['tabla_equipo']['procedimiento']).prop('disabled', true);
+                await inicializarSelectCategorias('categoriaContainer', 'modalAgregarProducto', equipo['tabla_producto']);
+                $('#categoria').prop('disabled', true);
+                $('#equipo').val(equipo['tabla_producto']['nombre']).prop('disabled', true);
+                $('#modeloValor').val(equipo['tabla_producto']['valor']).prop('disabled', true);
+                $('#equipoProcedimiento').val(equipo['tabla_producto']['procedimiento']).prop('disabled', true);
                 $('#marca').val(equipo['tabla_marca']['nombre']).prop('disabled', true);
                 $("#modelo").addClass('valid');
-                datos['id_marca_equipo'] = data_table[selectorId]['dataId'];
+                datos['id_producto_marca'] = data['id_producto_marca'];
                 etiquetaInput = 'modelo';
                 if (typeof data != 'undefined') {
                     $("#tituloModal").text("Editar Modelo");
@@ -294,13 +296,11 @@ function modalProducto(selectorId, data){
                         datos['id_marca'] = parseInt($("#"+etiquetaInput).val())
                     }
                 }
-                /*if(etiquetaInput == 'modelo'){
-                    datos['valor'] = $("#modeloValor").val();
-                }*/
                 if(etiquetaInput == 'equipo'){
-                    datos['procedimiento'] = $("#equipoProcedimiento").val();
-                    datos['valor'] = $("#modeloValor").val();
-                    datos['categoria'] = data_table[selectorId]['dataId']; // "5", "2,3,5", [2, 3, 5]
+                    let categoriasSeleccionadas = $('#categoria').val() || [];
+                    datos['categoria'] = categoriasSeleccionadas.join(',');
+                    //datos['procedimiento'] = $("#equipoProcedimiento").val();
+                    //datos['valor'] = $("#modeloValor").val();
                 }
                 if (typeof data != 'undefined'){
                     datos['id'] = etiquetaInput != 'marca' ? data['id'] : data['id_marca']
@@ -392,4 +392,62 @@ function cargarSelector(selectorId, dataId, url, placeholder) {
             toastr.warning("información no encontrada", "Error");
         }
     });
+}
+
+
+// 🔧 Inicializa y carga el Select2 de categorías
+async function inicializarSelectCategorias(categoriaContainerId, modalParentId, data) {
+    const $container = $('#' + categoriaContainerId);
+
+    // Reemplaza el contenido con el select multiple
+    $container.html(`
+        <label for="categoria" class="col-form-label">Categoría:<span class="required">*</span></label>
+        <select id="categoria" class="form-control valid text-capitalize form-multi-select" multiple data-coreui-search="global"></select>
+        <div class="invalid-feedback">Seleccione o ingrese una o más categorías.</div>
+    `);
+
+    // Inicializa Select2
+    $("#categoria").select2({
+        dropdownParent: $("#" + modalParentId),
+        placeholder: "Escriba o seleccione una o más categorías",
+        allowClear: true,
+        tags: true, // Permite agregar nuevas
+        width: "100%",
+        tokenSeparators: [',', ';']
+    });
+
+    // Cargar todas las categorías disponibles
+    try {
+        const response = await $.ajax({
+            url: URL_BACKEND + '/categoria/all',
+            type: 'GET',
+            dataType: 'json'
+        });
+
+        if (response.success && response.data) {
+            let categorias = response.data;
+            categorias.forEach(c => {
+                let option = new Option(c.nombre, c.id, false, false);
+                $('#categoria').append(option);
+            });
+        }
+
+        // Si hay data (modo edición), cargar las categorías seleccionadas
+        if (typeof data !== 'undefined' && data.id) {
+            const responseSel = await $.ajax({
+                url: URL_BACKEND + '/categoria/byproducto',
+                type: 'GET',
+                data: { id_producto: data.id },
+                dataType: 'json'
+            });
+
+            if (responseSel.success && responseSel.data) {
+                let idsSeleccionadas = responseSel.data.map(c => c.id);
+                $('#categoria').val(idsSeleccionadas).trigger('change');
+            }
+        }
+
+    } catch (error) {
+        console.error("Error al inicializar Select2 de categorías:", error);
+    }
 }

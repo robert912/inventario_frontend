@@ -1,495 +1,231 @@
-var tableEstados;
-//var object_search = {};
-
-$(document).ready(function() {
-    perfil = JSON.parse(sessionStorage.getItem('usuario'))['perfil']
-    /*if(perfil == 'admin'){
-        $(".tarjeta_Acciones").removeClass( "d-none" )
-    }else if(perfil == 'met'){
-        $(".tarjeta_proceso").removeClass( "d-none" ).addClass('col-6')
-        $('.tarjeta_cancelado').removeClass( "d-none" )
-    }else if(perfil == 'recept'){
-        $(".tarjeta_ingreso").removeClass( "d-none" )
-        $(".tarjeta_retiro").removeClass( "d-none" )
-    }else if(perfil == 'respon'){
-        $(".tarjeta_ingreso").removeClass( "d-none" )
-        $(".tarjeta_proceso").removeClass( "d-none" )
-        $(".tarjeta_revision_tec").removeClass( "d-none" )
-        $(".tarjeta_retiro").removeClass( "d-none" )
-    }*/
-    //loadTarjeta()
-    //cargarEstadosTabla()
-    loadDataTable()
+$(document).ready(function () {
+    initializeFilters();
 });
 
-//Tarjetas de estados
-function loadTarjeta() {
-    $.ajax({
-        url: URL_BACKEND + '/calibracion/tarjetas',
-        method: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            if (data['data'].hasOwnProperty('finalizado')){
-                $("#total_completado").text(data['data']['finalizado']);
-                $("#total_pausa").text(data['data']['pausado']);
-                $("#total_espera").text(data['data']['espera']);
-                $("#total_cancelado").text(data['data']['cancelado']);
-                $("#por_asignar").text(data['data']['ingresado']);
-                total_espera = (data['data']['certificado'] + data['data']['ingresado']);
-                $("#progreso_certificado").text(data['data']['certificado'] +'/'+ data['data']['espera']);
-                $("#progress_bar_certificado").css("width",  barPorcentaje(data['data']['certificado'], data['data']['espera']) + "%");
-                $("#en_proceso").text(data['data']['calibrando']);
-                para_procesar = (data['data']['certificado'] + data['data']['calibrando'] + data['data']['pausado']);
-                $("#progreso_proceso").text(data['data']['calibrando']+'/'+ para_procesar);
-                $("#progress_bar_proceso").css("width",  barPorcentaje(data['data']['calibrando'], para_procesar) + "%");
-                $("#revisionAdmin").text(data['data']['revisionAdmin']);
-                $("#revisionTec").text(data['data']['revisionTec']);
-                $("#para_entregar").text(data['data']['retiro']);
-                //countNumerico();
-            }
-        },
-        error: function(error) {
-            console.error('Error al cargar datos:', error);
-        }
-    });
-}
+async function initializeFilters() {
+    // Configure Toastr
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "timeOut": "3000"
+    };
 
-
-$('.search-change').on('change', function() {
-    tableEstados.destroy();
-    loadDataTable();
-});
-
-
-// Tabla con datos de calibracion
-function loadDataTable() {
-    const storedLimit = localStorage.getItem('datatable_limit');
-    const pageLength = storedLimit ? parseInt(storedLimit) : 10;
-    timeInterval = timereload()
-    tableEstados = $('#tablaInventarioProductos').DataTable({
-        processing: true,
-        serverSide: true,
-        pageLength: pageLength,
-        autoFill: false,
-        searching: false,
-        ordering:  false,
-        language: españolDataTable,
-        ajax: {
-            url: URL_BACKEND + '/asignacion/historial',
-            type: "GET",
-            dataType: "json",
-            data: function (d) {
-                const fields = [
-                    { key: 'id', selector: '#search-id' },
-                    { key: 'producto', selector: '#search-producto' },
-                    { key: 'marca', selector: '#search-marca' },
-                    { key: 'modelo', selector: '#search-modelo' },
-                    { key: 'serie', selector: '#search-serie' },
-                    { key: 'categoria', selector: '#search-categoria' },
-                    { key: 'estado_dispositivo', selector: '#search-estado' },  // es un <select>
-                    { key: 'ubicacion', selector: '#search-ubicacion' },
-                    { key: 'responsable', selector: '#search-responsable' },
-                    { key: 'tipo_adquisicion', selector: '#search-tipo-adquisicion' },
-                    { key: 'nro_documento', selector: '#search-nro-documento' },
-                    { key: 'codigo_usach', selector: '#search-codigo-usach' },
-                    { key: 'fecha_compra', selector: '#search-fecha-compra' },
-                    { key: 'fecha_ingreso', selector: '#search-fecha-ingreso' },
-                ];
-                var object_search = {};
-                object_search["limit"] = d.length;
-                object_search["offset"] = d.start;
-                object_search["draw"] = d.draw;
-                //object_search['estado'] = $("#select-estado").val();
-
-                fields.forEach(field => {
-                    const value = $(field.selector).val();
-                    if (searchValid(value)) {
-                        object_search[field.key] = value;
-                    }
-                });
-
-                return object_search;
-            },
-            dataFilter: function (result) {
-                var result = jQuery.parseJSON(result);
-                data = {
-                    recordsFiltered: result.count_rows,
-                    recordsTotal: result.count_rows,
-                    aaData: result.data
-                }
-                return JSON.stringify(data);
-            },
-        },
-        columns: [
-            { data: 'nombre_producto',
-                render: function(data) {
-                    return `<span class="text-capitalize" style="max-width: 200px; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${data || ''}</span>`;
-                }
-            },
-            { data: 'nombre_marca',
-                render: function(data) {
-                    return `<span class="text-uppercase" style="max-width: 80px; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${data || ''}</span>`;
-                }
-            },
-            { data: 'nombre_modelo',
-                render: function(data) {
-                    return `<span style="max-width: 100px; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${data || ''}</span>`;
-                }
-            },
-            { data: 'nro_serie',
-                render: function(data) {
-                    return `<span style="max-width: 120px; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${data || ''}</span>`;
-                }
-            },
-            { data: 'nombre_categoria',
-                render: function(data) {
-                    return `<span class="text-capitalize" style="max-width: 150px; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${data || ''}</span>`;
-                }
-            },
-            { data: 'nombre_estado_dispositivo',
-                render: function(data) {
-                    return `<span class="">${data || ''}</span>`;
-                }
-            },
-            { data: 'nombre_ubicacion',
-                render: function(data) {
-                    return `<span class="text-capitalize" style="max-width: 150px; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${data || ''}</span>`;
-                }
-            },
-            { data: 'nombre_responsable',
-                render: function(data) {
-                    return `<span class="text-capitalize" style="max-width: 180px; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${data || ''}</span>`;
-                }
-            },
-            { data: 'nombre_tipo_adquisicion',
-                render: function(data) {
-                    return `<span class="text-capitalize" style="max-width: 120px; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${data || ''}</span>`;
-                }
-            },
-            { data: 'nro_documento',
-                render: function(data) {
-                    return `<span style="max-width: 100px; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${data || ''}</span>`;
-                }
-            },
-            { data: 'codigo_usach',
-                render: function(data) {
-                    return `<span style="max-width: 100px; display:inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${data || ''}</span>`;
-                }
-            },
-            { data: 'fecha_ingreso',
-                render: function(data) {
-                    return data ? data : '-';
-                }
-            },
-            { title: '', 
-                render: function (data, type, row) {
-                    return `
-                    <div class="d-flex">
-                        <a href="#" class="btn btn-outline-success shadow btn-xs sharp me-1 ver-detalle" title='Ver detalle' ><i class='icon-magnifier'></i></a>
-                        <a href="#" class="btn btn-outline-purple shadow btn-xs sharp me-1 print-etiqueta" title='Imprimir etiqueta'><i class="fa fa-print"></i></a>
-                        ${row['estado'] < 4 && row['estado'] != 0 ? '<a href="#" class="btn btn-outline-danger shadow me-1 btn-xs sharp cancelar" title="Cancelar proceso"><i class="bi bi-x-octagon"></i></a>' : ''}
-                    </div>`;
-                },
-                "searchable": false,
-                "orderable": false
-            }
-        ],
-        createdRow: function (row, data, index) {
-            if(data['estado'] > 0 && data['estado'] != 6 && data['estado'] != 5 && data['fecha_retiro'] != null){
-                var fecha_final = data['fecha_retiro']
-                diasDif = difFechaActual(fecha_final)
-                if(diasDif <= 0){
-                    $('td', row).addClass('text-danger');   //add class to row
-                    $('td', row).css('font-weight', 'bold');  //add style to cell in third column
-                }
-                else if(0 > diasDif && diasDif <= 2){
-                    $('td', row).addClass('text-warning');   //add class to row
-                    $('td', row).css('font-weight', 'bold');  //add style to cell in third column
-                }
-            }   
-         },
-    });
-    tableEstados.on('length.dt', function(e, settings, len) {
-        localStorage.setItem('datatable_limit', len); // guarda el valor en localStorage
-    });
-}
-
-$(window).off('hashchange');
-$(window).on('hashchange', function() { 
-    clearInterval(timeInterval);
-});
-
-function timereload(){
-    return setInterval(function(){
-        console.log("recargo la tabla");
-        $('#tablaInventarioProductos').DataTable().ajax.reload();
-    }, 300000);
-}
-
-
-function barPorcentaje(numerador,denominador){
-    return porcentaje = (numerador / denominador) * 100;
-}
-
-function searchValid(value) {
-    return value !== undefined && value !== null && value.trim() !== '';
-}
-
-
-$('#tablaInventarioProductos').on('click', 'a.ver-detalle', function () {
-    let data_row = tableEstados.row($(this).parents('tr')).data();
-    showModalDetalleCalibracion(data_row);
-});
-
-$('#tablaInventarioProductos').on('click', 'a.print-etiqueta', function () {
-    let data_row = tableEstados.row($(this).parents('tr')).data();
-    printTarjetaIdentificacion(data_row,'modalPrintIngreso','tarjetaIngreso');
-});
-
-$('#tablaInventarioProductos').on('click', 'a.cancelar', function () {
-    let data_row = tableEstados.row($(this).parents('tr')).data();
-    Swal.fire({
-        title: "Cancelar Calibración",
-        text: "Está seguro que quieres cancelar esta calibración? No podrás revertir esta decisión!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        cancelButtonText: "Volver",
-        confirmButtonText: "Si, Cancelar!"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire({
-                text: "Ingrese una observación por el cual se cancelara la calibración",
-                input: "text",
-                inputAttributes: {
-                  autocapitalize: "off"
-                },
-                showCancelButton: true,
-                confirmButtonText: "Confirmar",
-                showLoaderOnConfirm: true,
-                preConfirm: async (observacion) => {
-                    try {
-                        var datos = {
-                            id: data_row['id'],
-                            observacion: observacion,
-                            estado: 0
-                        };
-                        const response = await 
-                        $.ajax({
-                            type: "PUT",
-                            url: URL_BACKEND + "/cambiarestado",
-                            dataType: "json",
-                            data: datos
-                        });
-
-                        if (!response.success) {
-                        return Swal.showValidationMessage(`
-                            ${await response.message}
-                        `);
-                        }
-                        return response.data;
-                    } catch (error) {
-                        Swal.showValidationMessage(`
-                            Problemas con la solicitud: ${error}
-                        `);
-                    } 
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: "Estado Actualizado",
-                        text: `Estado del id: ${result.value} de calibración fue modificado con exito`,
-                        icon: "success",
-                    });
-                    tableEstados.destroy()
-                    loadDataTable()
-                }
-            });
-        }
-    });
-});
-
-
-// Abrir modal para agregar
-function openAddModal() {
-    editingId = null;
-    currentDetailId = null;
-    document.getElementById('modalTitle').textContent = 'Asignar Producto';
-    document.getElementById('deviceForm').reset();
-    document.getElementById('deviceId').value = '';
-    document.getElementById('archivosList').innerHTML = '';
+    // Cargar categorías primero
+    await loadCategorias();
     
-    // Establecer fecha actual por defecto
-    document.getElementById('fechaIngreso').value = new Date().toISOString().split('T')[0];
-    //document.getElementById('fechaCompra').value = new Date().toISOString().split('T')[0];
-    
-    // Limpiar validaciones
-    document.getElementById('deviceForm').classList.remove('was-validated');
+    // Luego cargar catálogo inicial
+    loadCatalogo();
 
-    cargarSelector("categoria", null, "/categorias/activas", 'Seleccione una Categoría');
-    cargarSelector("estado", null, "/estado_dispositivo", 'Seleccione un Estado');
-    cargarSelector("responsable", null, "/responsable/activas", 'Seleccione un Responsable');
-    cargarSelector("ubicacion", null, "/ubicacion/activas", 'Seleccione una Ubicación');
-    cargarSelector("adquisicion", null, "/adquisicion/activas", 'Seleccione una forma de adquisicion');
+    // Search functionality - siempre usa API
+    document.getElementById('searchInput').addEventListener('input', function (e) {
+        const searchTerm = this.value.toLowerCase();
+        // Usar debounce para evitar muchas llamadas API
+        clearTimeout(this.searchTimeout);
+        this.searchTimeout = setTimeout(() => {
+            const categoriaId = document.getElementById('categoryFilter').value;
+            loadCatalogo(searchTerm, categoriaId);
+        }, 300);
+    });
 
-    // Inicializo Select2 después de cargar el modal
-    setTimeout(() => {
-        $("#producto, #marca, #modelo, #ubicacion, #adquisicion").select2({
-            dropdownParent: $("#deviceModal"), // importante para que funcione dentro del modal
-            tags: true, // permite agregar nuevos valores
-            placeholder: "Escriba o seleccione una opción",
-            allowClear: true,
-            width: "100%"
+    // Category filter - llamar a API cuando cambie la categoría
+    document.getElementById('categoryFilter').addEventListener('change', function (e) {
+        const categoriaId = this.value;
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        loadCatalogo(searchTerm, categoriaId);
+    });
+}
+
+async function loadCategorias() {
+    try {
+        const response = await $.ajax({
+            url: URL_BACKEND + '/categorias/activas',
+            type: 'GET',
+            dataType: 'json'
         });
-    }, 300);
 
-    // Encadenado de selects
-    $("#categoria").off("change").change(function(){
-        cargarSelector("producto", $(this).val(), "/productos/categoria", 'Seleccione un Equipo');
-        $('#producto').prop('disabled', false);
-        $('#marca').empty().trigger('change').prop('disabled', true);
-        $('#modelo').empty().trigger('change').prop('disabled', true);
-    });
-    
-    $("#producto").off("change").change(function(){
-        let productoId = $(this).val();
-        if (productoId) {
-            cargarSelector("marca", productoId, "/marca/producto", 'Seleccione una Marca');
-            $('#marca').prop('disabled', false);
-        } else {
-            $('#marca').empty().trigger('change').prop('disabled', true);
-            $('#modelo').empty().trigger('change').prop('disabled', true);
+        if (response.success && response.data) {
+            let categorias = response.data;
+            $('#categoryFilter').empty(); // Limpiar primero
+            $('#categoryFilter').append(new Option('Todas las categorías', '', true, true));
+            
+            categorias.forEach(c => {
+                let option = new Option(c.nombre, c.id, false, false);
+                $('#categoryFilter').append(option);
+            });
+            
+            console.log('Categorías cargadas:', categorias.length);
         }
-    });
-
-    $("#marca").off("change").change(function(){
-        let marcaId = $(this).val();
-        let productoId = $("#producto").val();
-        if (marcaId && productoId) {
-            cargarSelector("modelo", { producto: productoId, marca: marcaId }, "/modelo/producto_marca", 'Seleccione un Modelo');
-            $('#modelo').prop('disabled', false);
-        } else {
-            $('#modelo').empty().trigger('change').prop('disabled', true);
-        }
-    });
-
-    $("#estado").off("change").change(function(){
-        $("#divBaja").addClass("d-none");
-        if (this.value == 4) { // Si el valor es "De Baja"
-            $("#divBaja").removeClass("d-none");
-            document.getElementById('fechaBaja').value = new Date().toISOString().split('T')[0];
-        }
-    });
-    
+    } catch (error) {
+        console.error('Error cargando categorías:', error);
+        toastr.error("Error al cargar las categorías", "Error");
+    }
 }
 
+function loadCatalogo(searchTerm = '', categoriaId = '') {
+    // Preparar datos para la API
+    const data = {};
+    
+    if (searchTerm) {
+        data.search = searchTerm;
+    }
+    
+    if (categoriaId) {
+        data.id_categoria = categoriaId;
+    }
+    
+    console.log('Cargando catálogo con:', data);
+    
+    // Mostrar loading
+    const productsGrid = document.getElementById('productsGrid');
+    productsGrid.innerHTML = `
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Cargando productos...</p>
+        </div>
+    `;
 
-function cargarSelector(selectorId, dataId, url, placeholder) {
     $.ajax({
-        url: URL_BACKEND + url,
-        type: 'GET',
-        data: typeof dataId === "object" ? dataId : { id: dataId },
-        success: function(respuesta) {
-            let $select = $('#' + selectorId);
-            $select.empty();
-            respuesta = respuesta["data"];
-
-            if (respuesta.length) {
-                if (respuesta.length > 1) {
-                    $select.append(new Option(placeholder, '', true, false)).prop('disabled', false);
-                }
-                $.each(respuesta, function(i, item) {
-                    $select.append(new Option(item.nombre, item.id, false, false));
-                });
+        url: URL_BACKEND + "/inventario/catalogo",
+        type: "GET",
+        data: data,
+        success: function (response) {
+            console.log('Respuesta API - Productos encontrados:', response.data ? response.data.length : 0);
+            if (response.success) {
+                renderProducts(response.data);
+                updateProductCount(response.data.length);
             } else {
-                $select.append(new Option('No existe data disponible', '', true, true)).prop('disabled', true);
+                toastr.warning(response.message || "No se pudieron cargar los productos", "Atención");
+                renderProducts([]);
             }
-
-            $select.trigger('change');
         },
-        error: function() {
-            toastr.warning("información no encontrada", "Error");
+        error: function (xhr, status, error) {
+            console.error('Error en AJAX:', error);
+            toastr.error("Error al cargar el catálogo: " + error, "Error");
+            renderProducts([]);
         }
     });
 }
 
-function guardarDispositivo() {
-    // Validar formulario
-    let form = document.getElementById('deviceForm');
-    if (!form.checkValidity()) {
-        form.classList.add('was-validated');
+function renderProducts(products) {
+    const productsGrid = document.getElementById('productsGrid');
+    productsGrid.innerHTML = '';
+
+    if (products.length === 0) {
+        productsGrid.innerHTML = `
+            <div class="no-products">
+                <i class="fas fa-search fa-3x"></i>
+                <h3>No se encontraron productos</h3>
+                <p>Intenta con otros términos de búsqueda o categoría</p>
+            </div>
+        `;
         return;
     }
 
-    // Capturar datos del formulario
-    let data = {
-        id_producto: $("#producto").val(),
-        id_modelo: $("#modelo").val(),
-        nro_serie: $("#serie").val(),
-        id_marca: $("#marca").val(),
-        id_categoria: $("#categoria").val(),
-        id_ubicacion: $("#ubicacion").val(),
-        id_departamento: $("#departamento").val(),
-        id_responsable: $("#responsable").val(),
-        id_estado: $("#estado").val(),
-        id_tipo_adquisicion: $("#adquisicion").val(),
-        fecha_ingreso: $("#fechaIngreso").val(),
-        fecha_compra: $("#fechaCompra").val() || null,
-        fecha_baja: $("#fechaBaja").val() || null,
-        codigo_usach: $("#invetario").val(),
-        nro_documento: $("#metodoCompra").val(),
-        estado: 1
-    };
-
-    // Llamada AJAX al backend
-    $.ajax({
-        url: URL_BACKEND + "/asignacion/insert",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function (response) {
-            if (response.success) {
-                toastr.success("Dispositivo agregado correctamente", "Éxito");
-                $("#deviceModal").modal("hide");
-                tableEstados.ajax.reload(); // refrescar la tabla
-            } else {
-                toastr.warning(response.message || "No se pudo guardar el dispositivo", "Atención");
-            }
-        },
-        error: function (xhr) {
-            toastr.error("Error al guardar dispositivo: " + xhr.responseText, "Error");
-        }
+    products.forEach(product => {
+        const productCard = createProductCard(product);
+        productsGrid.appendChild(productCard);
     });
 }
 
+function createProductCard(product) {
+    const card = document.createElement('div');
+    card.className = 'product-card';
 
-$(document).on('click', '#generatePdf', function () {
+    // Determinar estado del stock
+    let statusClass = 'badge-disponible';
+    let statusText = 'Disponible';
+    
+    if (product.stock === 0) {
+        statusClass = 'badge-sin-stock';
+        statusText = 'Sin stock';
+    } else if (product.stock <= 5) {
+        statusClass = 'badge-stock-bajo';
+        statusText = 'Stock bajo';
+    }
+
+    // Generar imagen basada en el producto
+    const productImage = getProductImage(product.producto);
+
+    card.innerHTML = `
+        <img src="${productImage}" alt="${product.nombre_completo}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=400&fit=crop'">
+        <div class="product-body">
+            <div class="product-header">
+                <h3 class="product-title text-capitalize">${product.nombre_completo}</h3>
+            </div>
+            <div class="product-details">
+                <div class="product-location">
+                    <i class="fas fa-tags"></i>
+                    <span>SKU: ${product.sku}</span>
+                </div>
+                <div class="product-category">
+                    <i class="fas fa-hand"></i>
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                </div>
+            </div>
+            <div class="product-footer">
+                <div class="stock-info">
+                    <span class="stock-label">Stock:</span> ${product.stock} uds.
+                </div>
+                <button class="btn btn-solicitar" 
+                    onclick="solicitarProducto(${product.id}, '${product.nombre_completo.replace(/'/g, "\\'")}')"
+                    ${product.stock === 0 || product.disponible === 0 ? 'disabled' : ''}>
+                    <i class="fas fa-shopping-cart"></i>
+                    Solicitar
+                </button>
+            </div>
+        </div>
+    `;
+
+    return card;
+}
+
+function getProductImage(productName) {
+    const imageMap = {
+        'monitor': 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800&h=400&fit=crop',
+        'confort': 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=800&h=400&fit=crop',
+        'laptop': 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=400&fit=crop',
+        'silla': 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=800&h=400&fit=crop',
+        'impresora': 'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=800&h=400&fit=crop',
+        'mesa': 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&h=400&fit=crop',
+        'camara': 'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&h=400&fit=crop'
+    };
+
+    const name = (productName || '').toLowerCase();
+    for (const [key, image] of Object.entries(imageMap)) {
+        if (name.includes(key)) {
+            return image;
+        }
+    }
+    return 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=400&fit=crop';
+}
+
+function updateProductCount(count) {
+    document.getElementById('productCount').textContent = `${count} producto${count !== 1 ? 's' : ''}`;
+}
+
+function solicitarProducto(productId, productName) {
+    toastr.success(`Solicitud enviada para: ${productName}`, 'Éxito');
+    
+    // Ejemplo de llamada a API para solicitar producto
     $.ajax({
-        url: URL_BACKEND + '/generate_pdf',
-        method: 'GET',
-        xhrFields: {
-            responseType: 'blob'
+        url: URL_BACKEND + "/solicitudes",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            id_inventario: productId,
+            cantidad: 1,
+            observaciones: "Solicitud desde catálogo"
+        }),
+        success: function (response) {
+            if (response.success) {
+                toastr.success(`Solicitud para ${productName} enviada correctamente`, 'Éxito');
+            } else {
+                toastr.warning(response.message || "No se pudo completar la solicitud", "Atención");
+            }
         },
-        headers: {
-            'Authorization': token,
-            "Accept": "application/pdf",
-            "Access-Control-Allow-Origin": "*"
-        },
-        success: function (response, status, xhr) {
-            var blob = new Blob([response], { type: 'application/pdf' });
-            var link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = "documento.pdf";
-            link.click();
-
-
-            $('#message').html('<div class="alert alert-success">PDF generado y descargado con éxito</div>');
-        },
-        error: function (xhr, status, error) {
-            $('#message').html('<div class="alert alert-danger">Error al generar el PDF: ' + error + '</div>');
+        error: function (xhr) {
+            toastr.error("Error al enviar solicitud: " + xhr.responseText, "Error");
         }
     });
-});
-
+}

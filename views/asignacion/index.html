@@ -11,10 +11,11 @@
 						<i class="bi bi-box-seam text-primary me-2"></i>
 						Inventario de Productos
 					</h1>
-					<p class="text-muted mb-0">Gestión completa de Prodcutos</p>
+					<p class="text-muted mb-0">Gestión completa de equipos y dispositivos</p>
 				</div>
+                <button id="generatePdf" class="btn btn-info mb-3">Generar PDF</button>
 				<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deviceModal" onclick="openAddModal()">
-					<i class="fas fa-plus me-2"></i>Agregar Producto al Inventario
+					<i class="fas fa-plus me-2"></i>Asignar Producto
 				</button>
 			</div>
 		</div>
@@ -24,7 +25,7 @@
 <!--**********************************
 			Inicio Targeta de estados
 	***********************************-->
-		<!-- <div class="col-xl-3 col-6">
+		<div class="col-xl-3 col-6">
 			<div class="card box-hover">
 				<div class="card-body bg-success-light">
 					<div class="d-flex align-items-center">
@@ -83,7 +84,7 @@
 					</div>
 				</div>
 			</div>
-		</div> -->
+		</div>
 	<!--**********************************
 			Fin Targeta de estados
 	***********************************-->
@@ -97,47 +98,59 @@
 					<div class="table-responsive active-projects shorting">
 					
 						<div class="tbl-caption d-flex justify-content-between p-2">
-							<h4 class="heading mb-0"><i class="fas fa-table me-2"></i>Lista de Inventario</h4>
+							<h4 class="heading mb-0"><i class="fas fa-table me-2"></i>Lista de Dispositivos</h4>
+
 						</div>
-                        <table id="tablaInventarioProductos" class="table display" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>SKU</th>
-                                    <th>Producto</th>
-                                    <th>Marca</th>
-                                    <th>Modelo</th>
-                                    <th>Stock</th>
-                                    <th>Disponible</th>
-                                    <th>Ubicación</th>
-                                    <th style="width: 5rem">Acciones</th>
-                                </tr>
-                                <tr>
-                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-sku" name="sku" style="width: 100%;" autocomplete="off"></th>
-                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-producto" name="producto" style="width: 100%;" autocomplete="off"></th>
-                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-marca" name="marca" style="width: 100%;" autocomplete="off"></th>
-                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-modelo" name="modelo" style="width: 100%;" autocomplete="off"></th>
-                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-stock" name="stock" style="width: 100%;" autocomplete="off"></th>
-                                    <th></th>
-                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-ubicacion" name="ubicacion" style="width: 100%;" autocomplete="off"></th>
-                                    <th><input type="text" style="position: absolute; top: -1000px;" ><!--Se Agregar este input para evitar el autocompletado flotante--></th>
-                                </tr>
-                            </thead>
-                        </table>
+                            <table id="tablaInventarioProductos" class="table display" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th>N° Serie</th>
+                                        <th>Categoría</th>
+                                        <th>Estado</th>
+                                        <th>Ubicación</th>
+                                        <th>Responsable</th>
+                                        <th>Tipo Adquisición</th>
+                                        <th>N° Documento</th>
+                                        <th>Código Usach</th>
+                                        <th>Fecha Ingreso</th>
+                                        <th style="width: 5rem">Acciones</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-producto" name="producto" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-marca" name="marca" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-modelo" name="modelo" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-serie" name="serie" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-categoria" name="categoria" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-estado" name="estado" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-ubicacion" name="ubicacion" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-responsable" name="responsable" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-tipo-adquisicion" name="tipo_adquisicion" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-nro-documento" name="nro_documento" style="width: 100%;" autocomplete="off"></th>
+                                        <th class="search-change sorting_disabled p-1"><input type="search" id="search-codigo-usach" name="codigo_usach" style="width: 100%;" autocomplete="off"></th>
+                                        <th><input type="text" style="position: absolute; top: -1000px;" ><!--Se Agregar este input para evitar el autocompletado flotante--></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+
 					</div>
 				</div>
 			</div>
 		</div>
 <!--**********************************
-		Fin Tabla Inventario
+		Fin Tabla Estado Equipos
 ***********************************-->
 <!--**********************************
-Modal para Agregar/Editar Inventario
+Modal para Agregar/Editar Dispositivo
 ***********************************-->
         <div class="modal fade" id="deviceModal" tabindex="-1" data-bs-backdrop="static">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle">Agregar Inventario</h5>
+                        <h5 class="modal-title" id="modalTitle">Asignar Dispositivo</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -145,7 +158,7 @@ Modal para Agregar/Editar Inventario
                             <input type="hidden" id="deviceId">
                             
                             <!-- Información Básica -->
-                            <div class="row mb-4" id="basicInfoSection">
+                            <div class="row mb-4">
                                 <div class="col-12">
                                     <h6 class="text-primary border-bottom pb-2">
                                         <i class="fas fa-info-circle me-2"></i>Información Básica
@@ -158,35 +171,40 @@ Modal para Agregar/Editar Inventario
                                     <div class="invalid-feedback">Por favor seleccione una categoría</div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="producto" class="form-label">Producto <span class="required">*</span></label>
+                                    <label for="producto" class="form-label">Dispositivo<span class="required">*</span></label>
                                     <select class="form-select form-control" id="producto" required>
                                     </select>
-                                    <div class="invalid-feedback">Por favor ingrese el Prodcuto</div>
+                                    <div class="invalid-feedback">Por favor ingrese el Dispositivo</div>
                                 </div>
                                 <div class="col-md-4 d-none" id="otroDispositivoContainer"></div>
 
                                 <div class="col-md-4">
-                                    <label for="marca" class="form-label">Marca <span class="required">*</span></label>
+                                    <label for="marca" class="form-label">Marca *</label>
                                     <select class="form-select form-control" id="marca" required></select>
                                     <div class="invalid-feedback">Por favor ingrese la marca</div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="modelo" class="form-label">Modelo</label>
+                                    <label for="modelo" class="form-label">Modelo *</label>
                                     <select class="form-select form-control" id="modelo" required></select>
                                     <div class="invalid-feedback">Por favor seleccione o ingrese el modelo</div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="stock" class="form-label">Stock</label>
-                                    <input type="number" class="form-control" id="stock" min="0" value="0" >
-                                    <div class="invalid-feedback">Por favor ingrese un stock</div>
+                                    <label for="serie" class="form-label">Número de Serie *</label>
+                                    <input type="text" class="form-control" id="serie" required>
+                                    <div class="invalid-feedback">Por favor ingrese el número de serie</div>
                                 </div>
-                                <div class="col-md-4 d-flex flex-column" id="disponibleContainer">
-                                    <label class="form-label mb-2">Disponible para Solicitudes</label>
-                                    <div class="form-check form-switch pt-2">
-                                        <input class="form-check-input" type="checkbox" id="disponibleSwitch" role="switch" aria-checked="true" checked>
-                                        <label class="form-check-label" for="disponibleSwitch" id="disponibleSwitchLabel">Disponible</label>
-                                    </div>
+                                <div class="col-md-4">
+                                    <label for="invetario" class="form-label">Número Inventario (si aplica)</label>
+                                    <input type="text" class="form-control" id="invetario" required>
+                                    <div class="invalid-feedback">Por favor ingrese el número de serie</div>
                                 </div>
+                                <div class="col-md-4">
+                                    <label for="estado" class="form-label">Estado *</label>
+                                    <select class="form-select form-control" id="estado" required>
+                                    </select>
+                                    <div class="invalid-feedback">Por favor seleccione un estado</div>
+                                </div>
+                                
                             </div>
 
                             <!-- Información Adicional -->
@@ -198,7 +216,7 @@ Modal para Agregar/Editar Inventario
                                 </div>
                                 <div class="col-md-4">
                                     <label for="responsable" class="form-label">Responsable *</label>
-                                    <select class="form-select form-control text-capitalize" id="responsable" required></select>
+                                    <select class="form-select form-control" id="responsable" required></select>
                                     <div class="invalid-feedback">Por favor ingrese el responsable</div>
                                 </div>
                                 <div class="col-md-4">
@@ -220,6 +238,11 @@ Modal para Agregar/Editar Inventario
                                     <label for="fechaCompra" class="form-label">Fecha de Compra</label>
                                     <input type="date" class="form-control" id="fechaCompra">
                                     <div class="invalid-feedback">Por favor seleccione la fecha de Compra</div>
+                                </div>
+                                <div class="col-md-4 d-none" id="divBaja">
+                                    <label for="fechaBaja" class="form-label">Fecha de Baja</label>
+                                    <input type="date" class="form-control" id="fechaBaja">
+                                    <div class="invalid-feedback">Por favor seleccione la fecha de Baja</div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="metodoCompra" class="form-label">Boleta o Factura</label>
@@ -251,7 +274,7 @@ Modal para Agregar/Editar Inventario
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             <i class="fas fa-times me-2"></i>Cancelar
                         </button>
-                        <button type="button" class="btn btn-primary" onclick="guardarInventario()">
+                        <button type="button" class="btn btn-primary" onclick="guardarDispositivo()">
                             <i class="fas fa-save me-2"></i>Guardar
                         </button>
                     </div>
@@ -270,6 +293,6 @@ Modal Imprimir id calibracion
 <div id="modalContainer"></div>
 
 <script>
-    $('#full-layout').append("<script type='text/javascript' src='src/js_files/inventario/index.js?v=" + VERSION_JS + "'><\/script>");
+    $('#full-layout').append("<script type='text/javascript' src='src/js_files/asignacion/index.js?v=" + VERSION_JS + "'><\/script>");
 	//$('#full-layout').append("<script type='text/javascript' src='/js_files/dashboard/reingreso.js?v=" + VERSION_JS + "'><\/script>");
 </script>
