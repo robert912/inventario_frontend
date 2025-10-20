@@ -1,4 +1,20 @@
 $(document).ready(function () {
+    // $.ajax({
+    //     url: URL_BACKEND + '/obtener_img',
+    //     type: 'GET',
+    //     data: { producto: 'multímetro fluke 175' },
+    //     success: function (response) {
+    //         if (response.url) {
+    //             console.log('Imagen encontrada:', response.url);
+    //             $('#imagenProducto').attr('src', response.url);
+    //         } else {
+    //             console.log('No se encontró imagen');
+    //         }
+    //     },
+    //     error: function () {
+    //         console.log('Error en la solicitud');
+    //     }
+    // });
     initializeFilters();
 });
 
@@ -54,7 +70,6 @@ async function loadCategorias() {
                 $('#categoryFilter').append(option);
             });
             
-            console.log('Categorías cargadas:', categorias.length);
         }
     } catch (error) {
         console.error('Error cargando categorías:', error);
@@ -74,8 +89,6 @@ function loadCatalogo(searchTerm = '', categoriaId = '') {
         data.id_categoria = categoriaId;
     }
     
-    console.log('Cargando catálogo con:', data);
-    
     // Mostrar loading
     const productsGrid = document.getElementById('productsGrid');
     productsGrid.innerHTML = `
@@ -90,7 +103,6 @@ function loadCatalogo(searchTerm = '', categoriaId = '') {
         type: "GET",
         data: data,
         success: function (response) {
-            console.log('Respuesta API - Productos encontrados:', response.data ? response.data.length : 0);
             if (response.success) {
                 renderProducts(response.data);
                 updateProductCount(response.data.length);
@@ -167,7 +179,7 @@ function createProductCard(product) {
                 <div class="stock-info">
                     <span class="stock-label">Stock:</span> ${product.stock} uds.
                 </div>
-                <button class="btn btn-solicitar" 
+                <button class="btn btn-solicitar" data-bs-toggle="modal" data-bs-target="#solicitarProductoModal"
                     onclick="solicitarProducto(${product.id}, '${product.nombre_completo.replace(/'/g, "\\'")}')"
                     ${product.stock === 0 || product.disponible === 0 ? 'disabled' : ''}>
                     <i class="fas fa-shopping-cart"></i>
@@ -205,27 +217,237 @@ function updateProductCount(count) {
 }
 
 function solicitarProducto(productId, productName) {
-    toastr.success(`Solicitud enviada para: ${productName}`, 'Éxito');
+    cargarSelector("ubicacionNombre", null, "/ubicacion/activas", 'Seleccione una Ubicación', 'solicitarProductoModal');
+    // $("#ubicacionNombre").select2({
+    //     dropdownParent: $("#solicitarProductoModal"), // importante para que funcione dentro del modal
+    //     tags: false, // permite agregar nuevos valores
+    //     placeholder: "Escriba o seleccione una opción",
+    //     allowClear: true,
+    //     width: "100%"
+    // });
     
-    // Ejemplo de llamada a API para solicitar producto
     $.ajax({
-        url: URL_BACKEND + "/solicitudes",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            id_inventario: productId,
-            cantidad: 1,
-            observaciones: "Solicitud desde catálogo"
-        }),
+        url: URL_BACKEND + "/inventario/detalle", // o la ruta donde devuelves esa data
+        type: "GET",
+        data: { id_inventario: productId },
         success: function (response) {
             if (response.success) {
-                toastr.success(`Solicitud para ${productName} enviada correctamente`, 'Éxito');
+                response.data.inventario[0].nombre_completo = productName;
+                mostrarModalSolicitud(response.data);
             } else {
-                toastr.warning(response.message || "No se pudo completar la solicitud", "Atención");
+                toastr.warning(response.message || "No se pudo obtener la información del producto", "Atención");
             }
         },
         error: function (xhr) {
-            toastr.error("Error al enviar solicitud: " + xhr.responseText, "Error");
+            toastr.error("Error al obtener producto: " + xhr.responseText, "Error");
         }
     });
+}
+
+
+function mostrarModalSolicitud(data) {
+    const solicitante = data.solicitante;
+    const inventario = data.inventario[0];
+    const ubicacion = data.ubicacion[0];
+    const responsable = data.responsable;
+    //const historial = data.inventario_historial[0];
+
+    // Imagen y nombre
+    $("#productoImagen").attr("src", inventario.imagen_url || "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&h=400&fit=crop");
+    $("#productoNombre").text(`${inventario.nombre_completo}`);
+    $("#sku").text(`SKU: ${inventario.sku}`);
+
+    // Stock
+    $("#cantidad").attr("max", inventario.stock);
+    $("#stock").text(`Stock: ${inventario.stock}`);
+    $("#stockMaximo").text(`Máximo disponible: ${inventario.stock} unidades`);
+
+    // Datos del solicitante y responsable
+    $("#solicitanteNombre").val(solicitante.nombre);
+    $("#solicitanteEmail").val(solicitante.usuario);
+    $("#responsableNombre").text(`Gestor de Bodega: ${responsable.nombre}`);
+    $("#ubicacionNombre").val(ubicacion.nombre);
+
+    // Guarda el id del producto en el botón
+    $("#btnEnviarSolicitud").data("id", inventario.id);
+
+    // Abre el modal
+    $("#solicitarProductoModal").modal("show");
+}
+
+
+function enviarSolicitud() {
+    if (!validarFormularioSolicitud()) {
+        return; // No continuar si hay errores
+    }
+
+    const id_inventario = $("#btnEnviarSolicitud").data("id");
+    const cantidad = $("#cantidad").val();
+    const justificacion = $("#justificacion").val();
+    const ubicacion = $('#ubicacionNombre').val();
+    const nombre_completo = $('#productoNombre').text();
+
+    Swal.fire({
+        title: "Enviando solicitud...",
+        text: "Por favor, espera un momento",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    $.ajax({
+        url: URL_BACKEND + "/solicitud/insert",
+        type: "POST",
+        data: {
+            id_inventario: id_inventario,
+            cantidad: cantidad,
+            justificacion: justificacion,
+            id_ubicacion: ubicacion,
+            nombre_completo: nombre_completo
+        },
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Solicitud enviada!",
+                    text: "La solicitud fue enviada correctamente.",
+                    confirmButtonColor: "#00a499"
+                });
+
+                $("#solicitarProductoModal").modal("hide");
+
+                const form = document.getElementById("solicitudForm");
+                form.reset();
+                form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+                form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+            } else {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Atención",
+                    text: response.message || "No se pudo completar la solicitud",
+                    confirmButtonColor: "#f59e0b"
+                });
+            }
+        },
+        error: function (xhr) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Ocurrió un problema al enviar la solicitud.\n" + xhr.responseText,
+                confirmButtonColor: "#ef4444"
+            });
+        }
+    });
+}
+
+// Validar cantidad en tiempo real
+document.addEventListener('DOMContentLoaded', function() {
+    const cantidadInput = document.getElementById('cantidad');
+    
+    if (cantidadInput) {
+        cantidadInput.addEventListener('input', function() {
+            const valor = parseInt(this.value);
+            if (valor > 3) {
+                this.value = 3;
+            } else if (valor < 1) {
+                this.value = 1;
+            }
+        });
+    }
+});
+
+
+
+function cargarSelector(selectorId, dataId, url, placeholder, modalParent='') {
+    $.ajax({
+        url: URL_BACKEND + url,
+        type: 'GET',
+        data: typeof dataId === "object" ? dataId : { id: dataId },
+        success: function(respuesta) {
+            const $select = $('#' + selectorId);
+            $select.empty();
+            const datos = respuesta?.data || [];
+
+            // Siempre agregamos placeholder obligatorio
+            $select.append(new Option(placeholder, '', true, true));
+
+            if (datos.length) {
+                $.each(datos, function(i, item) {
+                    $select.append(new Option(item.nombre, item.id, false, false));
+                });
+                $select.prop('disabled', false);
+            } else {
+                $select.empty().append(new Option('No existe data disponible', '', true, true))
+                       .prop('disabled', true);
+            }
+
+            // Inicializamos Select2
+            const opciones = {
+                dropdownParent: modalParent ? $('#' + modalParent) : null,
+                tags: false,
+                placeholder: placeholder,
+                allowClear: true,
+                width: "100%"
+            };
+            $select.select2(opciones);
+
+            // Mantener sin selección al inicio
+            $select.val('').trigger('change');
+        },
+        error: function() {
+            toastr.warning("Información no encontrada", "Error");
+        }
+    });
+}
+
+
+function validarFormularioSolicitud() {
+    const form = document.getElementById('solicitudForm');
+    let valido = true;
+
+    // Remover estilos previos
+    form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+    form.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+
+    // Campos requeridos
+    const campos = [
+        { id: 'solicitanteNombre', nombre: 'Solicitante' },
+        { id: 'solicitanteEmail', nombre: 'Correo electrónico' },
+        { id: 'cantidad', nombre: 'Cantidad solicitada' },
+        { id: 'ubicacionNombre', nombre: 'Ubicación' },
+        { id: 'justificacion', nombre: 'Justificación' }
+    ];
+
+    campos.forEach(campo => {
+        const input = document.getElementById(campo.id);
+        const valor = input.value.trim();
+
+        if (!valor) {
+            valido = false;
+            input.classList.add('is-invalid');
+
+            // Mensaje personalizado
+            const feedback = document.createElement('div');
+            feedback.classList.add('invalid-feedback');
+            feedback.textContent = `El campo "${campo.nombre}" es obligatorio.`;
+            input.parentNode.appendChild(feedback);
+        } else if (campo.id === 'cantidad' && (parseInt(valor) < 1 || isNaN(valor))) {
+            valido = false;
+            input.classList.add('is-invalid');
+            const feedback = document.createElement('div');
+            feedback.classList.add('invalid-feedback');
+            feedback.textContent = `Debe ingresar una cantidad válida (mínimo 1).`;
+            input.parentNode.appendChild(feedback);
+        } else if (campo.id === 'solicitanteEmail' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
+            valido = false;
+            input.classList.add('is-invalid');
+            const feedback = document.createElement('div');
+            feedback.classList.add('invalid-feedback');
+            feedback.textContent = `Ingrese un correo electrónico válido.`;
+            input.parentNode.appendChild(feedback);
+        }
+    });
+    return valido;
 }

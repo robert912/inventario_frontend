@@ -1,4 +1,3 @@
-console.log(JSON.parse(sessionStorage.getItem('usuario')))
 var perfil = JSON.parse(sessionStorage.getItem('usuario'))['perfil'];
 
 function agregarCeros(numero) {

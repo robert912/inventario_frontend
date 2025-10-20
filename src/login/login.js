@@ -11,3 +11,10 @@ $(document).ready(function () {
         }
     });
 });
+
+document.getElementById("dz-password").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        loginAction();
+    }
+});

@@ -427,7 +427,9 @@ function verificarInventarioExistente(productoId, marcaId) {
                         confirmButtonText: 'Sí, agregar stock',
                         cancelButtonText: 'No, cancelar',
                         confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33'
+                        cancelButtonColor: '#d33',
+                        allowOutsideClick: false,  // Evita cerrar al hacer clic fuera
+                        allowEscapeKey: false     // Evita cerrar con tecla Escape
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $('#basicInfoSection label[for="stock"]').text('Stock inicial');

@@ -269,3 +269,77 @@ ul.info_lista li {
     margin-right: 8px;
     width: 16px;
 }
+
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content .modal-header {
+    padding: 1.5rem 1.5rem 1rem;
+}
+
+.modal-content .modal-body {
+    padding: 0 1.5rem 1.5rem;
+}
+
+.modal-content .modal-footer {
+    padding: 1rem 1.5rem 1.5rem;
+}
+
+.modal-content .product-card-sol {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.5rem;
+    background: var(--bs-body-bg);
+}
+
+.modal-content .product-image-card {
+    max-height: 160px;
+    object-fit: cover;
+    border-radius: 6px;    
+}
+
+.modal-content .product-info {
+    border: 1px solid #e9ecef;
+}
+
+.modal-content .form-label {
+    margin-bottom: 0.5rem;
+    color: var(--secondary);
+}
+
+.modal-content .form-control,
+.modal-content .form-select {
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+}
+
+.modal-content .form-control:focus,
+.modal-content .form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.modal-content .btn {
+    border-radius: 6px;
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
+    font-size: 0.9375rem;
+}
+
+.modal-content .badge {
+    font-weight: 500;
+    padding: 0.35rem 0.65rem;
+}
+
+.modal-content small.text-muted {
+    font-size: 0.8125rem;
+}
+
+.modal-content .bi {
+    vertical-align: middle;
+}

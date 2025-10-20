@@ -56,8 +56,94 @@
     </div>
 </div>
 <!--**********************************
-Modal Imprimir id calibracion
+Modal Solicitud de Producto
 ***********************************-->
+<!-- Modal -->
+<div class="modal fade" id="solicitarProductoModal" tabindex="-1" aria-labelledby="solicitarProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <div class="d-flex align-items-start mb-2">
+                        <i class="bi bi-box-seam me-2 fs-5"></i>
+                        <h5 class="fw-semibold mb-0">Producto Solicitado</h5>
+                    </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Product Card -->
+                <div class="product-card-sol mb-4">
+                    <div class="row g-0 align-items-center p-2 rounded">
+
+                        <!-- Columna Izquierda: Imagen -->
+                        <div class="col-md-4 text-center">
+                        <img id="productoImagen" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/inv41.JPG-aQt77TJuLVEZs0KqPivgBYCy6p4Q6b.jpeg" alt="Imagen del producto" class="product-image-card img-fluid rounded shadow-sm">
+                        </div>
+
+                        <!-- Columna Derecha: Información -->
+                        <div class="col-md-8 ps-md-3 mt-3 mt-md-0">
+                            <h6 id="productoNombre" class="fw-semibold mb-1">Impresora HP LaserJet</h6>
+                            <p id="sku" class="small mb-2">SKU: INV-000001</p>
+                            <div class="d-flex flex-wrap gap-3 small mb-1">
+                                <span class="badge bg-white text-dark border" id="stock">Stock: 3</span>
+                            </div>
+                            <div class="small text-muted text-capitalize">
+                                <div id="responsableNombre">Gestor de Bodega: Juan Pérez</div>
+                                <div id="ubicacion">Almacenamiento: Biblioteca</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form id="solicitudForm" class="needs-validation" novalidate>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="solicitanteNombre" class="form-label small fw-semibold">
+                                <i class="bi bi-person me-1"></i>Solicitante
+                            </label>
+                            <input type="text" class="form-control text-capitalize" id="solicitanteNombre" readonly required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="solicitanteEmail" class="form-label small fw-semibold">
+                                <i class="bi bi-envelope me-1"></i>Email
+                            </label>
+                            <input type="email" class="form-control" id="solicitanteEmail" readonly required>
+                        </div>
+                    
+
+                        <div class="col-md-6 mt-3">
+                            <label for="cantidad" class="form-label small fw-semibold"><i class="bi bi-box-seam me-1"></i>Cantidad solicitada</label>
+                            <input type="number" class="form-control valid" id="cantidad" value="1" min="1" required>
+                            <small class="text-muted" id="stockMaximo"></small>
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                            <label for="ubicacionNombre" class="form-label small fw-semibold"><i class="bi bi-building me-1"></i>Ubicación</label>
+                            <select class="form-select form-control valid" id="ubicacionNombre" required placeholder="Ej: Oficina Principal - Piso 2" required></select>
+                            <small class="text-muted">Lugar donde sera utilizado</small>
+                        </div>
+                    </div>
+
+                    
+
+                    <div class="mb-3">
+                        <label for="justificacion" class="form-label small fw-semibold">
+                            <i class="bi bi-chat-left-text me-1"></i>Justificación de la solicitud
+                        </label>
+                        <textarea class="form-control valid" id="justificacion" rows="4" placeholder="Explica por qué necesitas este producto..." required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Cancelar</button>
+                <button id="btnEnviarSolicitud" type="button" class="btn btn-solicitar" onclick="enviarSolicitud()">Enviar Solicitud</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div id="modalContainer"></div>
 
 <script>
