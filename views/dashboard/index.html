@@ -86,10 +86,10 @@ Modal Solicitud de Producto
                             <div class="d-flex flex-wrap gap-3 small mb-1">
                                 <span class="badge bg-white text-dark border" id="stock">Stock: 3</span>
                             </div>
-                            <div class="small text-muted text-capitalize">
+                            <!--div class="small text-muted text-capitalize">
                                 <div id="responsableNombre">Gestor de Bodega: Juan Pérez</div>
                                 <div id="ubicacion">Almacenamiento: Biblioteca</div>
-                            </div>
+                            </div-->
                         </div>
 
                     </div>
@@ -99,15 +99,11 @@ Modal Solicitud de Producto
                 <form id="solicitudForm" class="needs-validation" novalidate>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="solicitanteNombre" class="form-label small fw-semibold">
-                                <i class="bi bi-person me-1"></i>Solicitante
-                            </label>
+                            <label for="solicitanteNombre" class="form-label small fw-semibold"><i class="bi bi-person me-1"></i>Solicitante</label>
                             <input type="text" class="form-control text-capitalize" id="solicitanteNombre" readonly required>
                         </div>
                         <div class="col-md-6">
-                            <label for="solicitanteEmail" class="form-label small fw-semibold">
-                                <i class="bi bi-envelope me-1"></i>Email
-                            </label>
+                            <label for="solicitanteEmail" class="form-label small fw-semibold"><i class="bi bi-envelope me-1"></i>Email</label>
                             <input type="email" class="form-control" id="solicitanteEmail" readonly required>
                         </div>
                     
@@ -123,14 +119,21 @@ Modal Solicitud de Producto
                             <select class="form-select form-control valid" id="ubicacionNombre" required placeholder="Ej: Oficina Principal - Piso 2" required></select>
                             <small class="text-muted">Lugar donde sera utilizado</small>
                         </div>
+
+                        <div class="col-md-6 mt-3">
+                            <label for="selectGestorNombre" class="form-label small fw-semibold"><i class="bi bi-file-person me-1"></i></i>Gestor de Bodega</label>
+                            <select class="form-select form-control text-capitalize valid" id="selectGestorNombre" required placeholder="Seleccione encargado del producto" required></select>
+                            <small class="text-muted">Responsable del Inventario</small>
+                        </div>
+                        <!-- <div class="col-md-6 mt-3">
+                            <label for="ubicacionAlmacen" class="form-label small fw-semibold"><i class="bi bi-building me-1"></i>Almacen</label>
+                            <select class="form-select form-control text-capitalize valid" id="ubicacionAlmacen" required placeholder="Seleccione lugar de almacenamiento" required disabled></select>
+                            <small class="text-muted">Lugar donde es almacenado el producto</small>
+                        </div> -->
                     </div>
 
-                    
-
                     <div class="mb-3">
-                        <label for="justificacion" class="form-label small fw-semibold">
-                            <i class="bi bi-chat-left-text me-1"></i>Justificación de la solicitud
-                        </label>
+                        <label for="justificacion" class="form-label small fw-semibold"><i class="bi bi-chat-left-text me-1"></i>Justificación de la solicitud</label>
                         <textarea class="form-control valid" id="justificacion" rows="4" placeholder="Explica por qué necesitas este producto..." required></textarea>
                     </div>
                 </form>

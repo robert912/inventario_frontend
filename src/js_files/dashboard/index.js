@@ -248,9 +248,7 @@ function solicitarProducto(productId, productName) {
 function mostrarModalSolicitud(data) {
     const solicitante = data.solicitante;
     const inventario = data.inventario[0];
-    const ubicacion = data.ubicacion[0];
     const responsable = data.responsable;
-    //const historial = data.inventario_historial[0];
 
     // Imagen y nombre
     $("#productoImagen").attr("src", inventario.imagen_url || "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&h=400&fit=crop");
@@ -265,16 +263,40 @@ function mostrarModalSolicitud(data) {
     // Datos del solicitante y responsable
     $("#solicitanteNombre").val(solicitante.nombre);
     $("#solicitanteEmail").val(solicitante.usuario);
-    $("#responsableNombre").text(`Gestor de Bodega: ${responsable.nombre}`);
-    $("#ubicacionNombre").val(ubicacion.nombre);
 
     // Guarda el id del producto en el botón
     $("#btnEnviarSolicitud").data("id", inventario.id);
+
+    // Inicializar selects (responsable / ubicación)
+    inicializarSelectsResponsable(responsable);
 
     // Abre el modal
     $("#solicitarProductoModal").modal("show");
 }
 
+function inicializarSelectsResponsable(responsable, modalId = "#solicitarProductoModal") {
+    const $responsableSelect = $("#selectGestorNombre");
+    //const $ubicacionSelect = $("#ubicacionAlmacen");
+
+    // Limpiar selects
+    $responsableSelect.empty().append(new Option("Seleccione un responsable...", "", true, true)).trigger("change");
+    //$ubicacionSelect.empty().append(new Option("Seleccione una ubicación...", "", true, true)).trigger("change");
+
+    // Inicializar Select2
+    const selectOptions = {
+        dropdownParent: $(modalId),
+        allowClear: true,
+        width: "100%"
+    };
+    $responsableSelect.select2({ ...selectOptions, placeholder: "Seleccione un responsable..." });
+
+    // Cargar responsables
+    responsable.forEach(r => {
+        const option = new Option(`${r.nombre_responsable}`, r.id_responsable, false, false);
+        $responsableSelect.append(option);
+    });
+    $responsableSelect.prop("disabled", false).trigger("change");
+}
 
 function enviarSolicitud() {
     if (!validarFormularioSolicitud()) {
@@ -285,6 +307,7 @@ function enviarSolicitud() {
     const cantidad = $("#cantidad").val();
     const justificacion = $("#justificacion").val();
     const ubicacion = $('#ubicacionNombre').val();
+    const responsable = $('#selectGestorNombre').val();
     const nombre_completo = $('#productoNombre').text();
 
     Swal.fire({
@@ -305,6 +328,7 @@ function enviarSolicitud() {
             cantidad: cantidad,
             justificacion: justificacion,
             id_ubicacion: ubicacion,
+            id_responsable: responsable,
             nombre_completo: nombre_completo
         },
         success: function (response) {
@@ -417,6 +441,7 @@ function validarFormularioSolicitud() {
         { id: 'solicitanteEmail', nombre: 'Correo electrónico' },
         { id: 'cantidad', nombre: 'Cantidad solicitada' },
         { id: 'ubicacionNombre', nombre: 'Ubicación' },
+        { id: 'selectGestorNombre', nombre: 'Responsable' },
         { id: 'justificacion', nombre: 'Justificación' }
     ];
 

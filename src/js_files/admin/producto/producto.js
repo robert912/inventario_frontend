@@ -270,12 +270,12 @@ function modalProducto(selectorId, data){
                 $('#equipoProcedimiento').val(equipo['tabla_producto']['procedimiento']).prop('disabled', true);
                 $('#marca').val(equipo['tabla_marca']['nombre']).prop('disabled', true);
                 $("#modelo").addClass('valid');
-                datos['id_producto_marca'] = data['id_producto_marca'];
                 etiquetaInput = 'modelo';
                 if (typeof data != 'undefined') {
                     $("#tituloModal").text("Editar Modelo");
                     $("#submitFormEquipo").text("Editar");
                     $("#modelo").val(data['nombre']);
+                    datos['id_producto_marca'] = data['id_producto_marca'];
                     //$("#modeloValor").val(data['valor']);
                 }
                 break;
@@ -301,6 +301,10 @@ function modalProducto(selectorId, data){
                     datos['categoria'] = categoriasSeleccionadas.join(',');
                     //datos['procedimiento'] = $("#equipoProcedimiento").val();
                     //datos['valor'] = $("#modeloValor").val();
+                }
+                if(etiquetaInput == 'modelo'){
+                    datos["producto"] = equipo['tabla_producto']['id'];
+                    datos["marca"] = equipo['tabla_marca']['id'];
                 }
                 if (typeof data != 'undefined'){
                     datos['id'] = etiquetaInput != 'marca' ? data['id'] : data['id_marca']

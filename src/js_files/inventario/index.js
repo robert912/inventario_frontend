@@ -2,6 +2,16 @@ var tableEstados;
 //var object_search = {};
 
 $(document).ready(function() {
+    $.ajax({
+        url: URL_BACKEND + '/obtener_img?producto=televisor',
+        type: 'GET',
+        success: function(respuesta) {
+            console.log(respuesta)
+        },
+        error: function() {
+            toastr.warning("información no encontrada", "Error");
+        }
+    });
     perfil = JSON.parse(sessionStorage.getItem('usuario'))['perfil']
     /*if(perfil == 'admin'){
         $(".tarjeta_Acciones").removeClass( "d-none" )
@@ -218,7 +228,7 @@ function openAddModal() {
     cargarSelector("categoria", null, "/categorias/activas", 'Seleccione una Categoría');
     cargarSelector("responsable", null, "/responsable/activas", 'Seleccione un Responsable');
     cargarSelector("ubicacion", null, "/ubicacion/activas", 'Seleccione una Ubicación');
-    cargarSelector("adquisicion", null, "/adquisicion/activas", 'Seleccione una forma de adquisicion');
+    cargarSelector("adquisicion", null, "/tipo_adquisicion/activas", 'Seleccione una forma de adquisicion');
 
     // Inicializo Select2 después de cargar el modal
     setTimeout(() => {
@@ -344,7 +354,12 @@ function guardarInventario() {
             data: JSON.stringify(data),
             success: function (response) {
                 if (response.success) {
-                    toastr.success("Producto agregado al inventario correctamente", "Éxito");
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Agregado',
+                        text: 'El stock se ha actualizado correctamente.'
+                    });
+                    //toastr.success("Producto agregado al inventario correctamente", "Éxito");
                     $("#deviceModal").modal("hide");
                     tableEstados.ajax.reload(); // refrescar la tabla
                 } else {
@@ -364,7 +379,12 @@ function guardarInventario() {
             data: JSON.stringify(data),
             success: function (response) {
                 if (response.success) {
-                    toastr.success("Producto agregado al inventario correctamente", "Éxito");
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Agregado',
+                        text: 'El producto se agrego correctamente al inventario.'
+                    });
+                    //toastr.success("Producto agregado al inventario correctamente", "Éxito");
                     $("#deviceModal").modal("hide");
                     tableEstados.ajax.reload(); // refrescar la tabla
                 } else {
@@ -445,12 +465,6 @@ function verificarInventarioExistente(productoId, marcaId) {
                                 $('#stock').closest('.col-md-4').after(qtyInput);
                             }
 
-                            // Aquí llamas a tu función o API para agregar stock
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Agregado',
-                                text: 'El stock se ha actualizado correctamente.'
-                            });
                             $('#deviceForm').attr('data-id-inventario', data.id);
                             $('#modalTitle').text('Actualizar Inventario - SKU: ' + data.sku);
                             $('#stock').val(data.stock); // Actualizar el campo stock con el valor existente

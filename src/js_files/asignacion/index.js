@@ -332,7 +332,7 @@ function openAddModal() {
     cargarSelector("estado", null, "/estado_dispositivo", 'Seleccione un Estado');
     cargarSelector("responsable", null, "/responsable/activas", 'Seleccione un Responsable');
     cargarSelector("ubicacion", null, "/ubicacion/activas", 'Seleccione una Ubicación');
-    cargarSelector("adquisicion", null, "/adquisicion/activas", 'Seleccione una forma de adquisicion');
+    cargarSelector("adquisicion", null, "/tipo_adquisicion/activas", 'Seleccione una forma de adquisicion');
 
     // Inicializo Select2 después de cargar el modal
     setTimeout(() => {
