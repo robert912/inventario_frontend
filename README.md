@@ -1,13 +1,12 @@
 🧭 Estructura general del menú
 1. Inicio / Dashboard
-  📊 Dashboard
-    Vista general de productos disponibles, asignados, solicitudes recientes, estadísticas, etc.
+   📊 Dashboard
+     Vista general de productos disponibles, asignados, solicitudes recientes, estadísticas, etc.
 
-2. Inventario
+3. Inventario
   📦 Productos inventariados
     Crear nuevos registros de inventario
     Ver lista completa
-
   🔄 Asignaciones
     Asignar productos a responsables
     Ver asignaciones actuales
