@@ -64,7 +64,7 @@ function handleLoginResponse(response) {
 function renderGoogleButton() {
     if (window.google && google.accounts && google.accounts.id) {
         google.accounts.id.initialize({
-            client_id: "455558882520-mbkd8jsjj3ea5geo0n939khg38m4m2bd.apps.googleusercontent.com",
+            client_id: "455558882520-sca03lcvoijdroup4p972dvpptfqg2mh.apps.googleusercontent.com",
             callback: handleCredentialResponse
         });
         google.accounts.id.renderButton(

@@ -66,7 +66,7 @@ function loadDataTable() {
     const storedLimit = localStorage.getItem('datatable_limit');
     const pageLength = storedLimit ? parseInt(storedLimit) : 10;
     timeInterval = timereload()
-    tableEstados = $('#tablaInventarioProductos').DataTable({
+    tableEstados = $('#tablaHistorialAsignacion').DataTable({
         processing: true,
         serverSide: true,
         pageLength: pageLength,
@@ -222,7 +222,7 @@ $(window).on('hashchange', function() {
 function timereload(){
     return setInterval(function(){
         console.log("recargo la tabla");
-        $('#tablaInventarioProductos').DataTable().ajax.reload();
+        $('#tablaHistorialAsignacion').DataTable().ajax.reload();
     }, 300000);
 }
 
@@ -236,17 +236,17 @@ function searchValid(value) {
 }
 
 
-$('#tablaInventarioProductos').on('click', 'a.ver-detalle', function () {
+$('#tablaHistorialAsignacion').on('click', 'a.ver-detalle', function () {
     let data_row = tableEstados.row($(this).parents('tr')).data();
     showModalDetalleCalibracion(data_row);
 });
 
-$('#tablaInventarioProductos').on('click', 'a.print-etiqueta', function () {
+$('#tablaHistorialAsignacion').on('click', 'a.print-etiqueta', function () {
     let data_row = tableEstados.row($(this).parents('tr')).data();
     printTarjetaIdentificacion(data_row,'modalPrintIngreso','tarjetaIngreso');
 });
 
-$('#tablaInventarioProductos').on('click', 'a.cancelar', function () {
+$('#tablaHistorialAsignacion').on('click', 'a.cancelar', function () {
     let data_row = tableEstados.row($(this).parents('tr')).data();
     Swal.fire({
         title: "Cancelar Calibración",

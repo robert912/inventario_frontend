@@ -1,7 +1,7 @@
 <div class="container-fluid">
 
 	<!--**********************************
-		Ecabezado del Dashboard
+		Ecabezado Asignacion
 	***********************************-->
 	<div class="row mb-4">
 		<div class="col-12">
@@ -9,7 +9,7 @@
 				<div>
 					<h1 class="h3 mb-0">
 						<i class="bi bi-box-seam text-primary me-2"></i>
-						Inventario de Productos
+						Asignación de Productos
 					</h1>
 					<p class="text-muted mb-0">Gestión completa de equipos y dispositivos</p>
 				</div>
@@ -22,75 +22,62 @@
 	</div>
 
 	<div class="row">
-<!--**********************************
-			Inicio Targeta de estados
-	***********************************-->
-		<div class="col-xl-3 col-6">
-			<div class="card box-hover">
-				<div class="card-body bg-success-light">
-					<div class="d-flex align-items-center">
-						<div class="icon-box icon-box-lg text-success bg-success-light rounded-circle">
-							<i class="bi bi-card-checklist fa-3x"></i>
+
+        <!--**********************************
+			Inicio Tabla Solicitudes de Productos
+	    ***********************************-->
+		<div class="col-12 active-p">
+			<div class="card">
+				<div class="card-body p-2">
+					<div class="table-responsive active-projects shorting">
+					
+						<div class="tbl-caption d-flex justify-content-between p-2">
+							<h4 class="heading mb-0"><i class="bi bi-chat-left-text me-2"></i>Solicitud de Productos</h4>
 						</div>
-						<div class="total-projects ms-3">
-							<h3 id="totalDevices" class="text-success count">0</h3>
-							<span>Total Dispositivos</span>
-						</div>
+                        <table id="tablaSolicitudProductos" class="table display" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Marca</th>
+                                    <th>Modelo</th>
+                                    <th>N° Serie</th>
+                                    <th>Categoría</th>
+                                    <th>Estado</th>
+                                    <th>Ubicación</th>
+                                    <th>Responsable</th>
+                                    <th>Tipo Adquisición</th>
+                                    <th>N° Documento</th>
+                                    <th>Código Usach</th>
+                                    <th>Fecha Ingreso</th>
+                                    <th style="width: 5rem">Acciones</th>
+                                </tr>
+                                <!-- <tr>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-producto" name="producto" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-marca" name="marca" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-modelo" name="modelo" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-serie" name="serie" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-categoria" name="categoria" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-estado" name="estado" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-ubicacion" name="ubicacion" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-responsable" name="responsable" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-tipo-adquisicion" name="tipo_adquisicion" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-nro-documento" name="nro_documento" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-codigo-usach" name="codigo_usach" style="width: 100%;" autocomplete="off"></th>
+                                    <th><input type="text" style="position: absolute; top: -1000px;" ><Se Agregar este input para evitar el autocompletado flotante></th>
+                                    <th></th>
+                                </tr> -->
+                            </thead>
+                        </table>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-xl-3 col-6">
-			<div class="card box-hover">
-				<div class="card-body bg-purple-light">
-					<div class="d-flex align-items-center">
-						<div class="icon-box icon-box-lg text-purple bg-purple-light rounded-circle">
-							<i class="bi bi-box-seam fa-3x"></i>
-						</div>
-						<div class="total-projects ms-3">
-							<h3 id="total_espera" class="text-purple count">0</h3> 
-							<span>Total En Espera</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-3 col-6">
-			<div class="card box-hover">
-				<div class="card-body bg-dark-light">
-					<div class="d-flex align-items-center">
-						<div class="icon-box icon-box-lg text-dark bg-dark-light rounded-circle">
-							<i class="bi bi-pause-circle fa-3x"></i>
-						</div>
-						<div class="total-projects ms-3">
-							<h3 id="total_pausa" class="text-dark count">0</h3>
-							<span>Total En Pausa</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-3 col-6 tarjeta_cancelado ">
-			<div class="card box-hover">
-				<div class="card-body bg-danger-light">
-					<div class="d-flex align-items-center">
-						<div class="icon-box icon-box-lg text-danger bg-danger-light rounded-circle">
-							<i class="bi bi-shield-x fa-3x"></i>
-						</div>
-						<div class="total-projects ms-3">
-							<h3 id="total_cancelado" class="text-danger count">0</h3> 
-							<span>Total Cancelados</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	<!--**********************************
-			Fin Targeta de estados
-	***********************************-->
+    <!--**********************************
+        Fin Tabla Solicitudes de Productos
+    ***********************************-->
 
 	<!--**********************************
-			Inicio Tabla Estado Equipos
+	Inicio Tabla Historial de Asignaciones
 	***********************************-->
 		<div class="col-12 active-p">
 			<div class="card">
@@ -101,7 +88,7 @@
 							<h4 class="heading mb-0"><i class="fas fa-table me-2"></i>Lista de Dispositivos</h4>
 
 						</div>
-                            <table id="tablaInventarioProductos" class="table display" cellspacing="0" width="100%">
+                            <table id="tablaHistorialAsignacion" class="table display" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th>Producto</th>
@@ -141,7 +128,7 @@
 			</div>
 		</div>
 <!--**********************************
-		Fin Tabla Estado Equipos
+Fin Tabla Historial de Asignaciones
 ***********************************-->
 <!--**********************************
 Modal para Agregar/Editar Dispositivo
