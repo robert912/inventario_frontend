@@ -39,7 +39,7 @@ function makeAjaxRequest(url, method, data, successCallback, errorCallback) {
         },
         success: successCallback,
         error: errorCallback || function (xhr, status, error) {
-            toastr.error('Ha ocurrido un error inesperado', 'Error');
+            toastr.error(xhr.responseJSON.message, 'Error');
         }
     });
 }
