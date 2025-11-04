@@ -66,6 +66,22 @@ $(document).ready(function () {
         if (data_usuario.hasOwnProperty('nombre')){
             nombre_usuario = data_usuario.nombre;
             nombre_dpto = data_departamento.nombre;
+            if(data_usuario.avatar != null && data_usuario.avatar != ""){
+                $('.header-media img').attr('src', data_usuario.avatar);
+            }
+            if (data_departamento.hasOwnProperty('logo_url') && data_departamento.logo_url) {
+                const imgPath = 'src/assets/img/' + data_departamento.logo_url + '.jpg';
+                $.ajax({
+                    url: imgPath,
+                    type: 'HEAD',
+                    success: function() {
+                        $('.card-header img.avatar').attr('src', imgPath);
+                    },
+                    error: function() {
+                        $('.card-header img.avatar').attr('src', 'src/assets/img/Usach_P1.png');
+                    }
+                });
+            }
         }
     }
 
