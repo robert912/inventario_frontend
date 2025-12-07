@@ -9,9 +9,9 @@ if(ENVIROMENT == "development"){
     URL_BACKEND = "http://localhost:5002";
 
 }else if(ENVIROMENT == "testing"){
-    URL_LOGIN = "https://testing.inventario.cl/login.html";
+    URL_LOGIN = "https://inv.trebolapp.cl/login.html";
     tiempo_para_expirar = 1440
-    URL_BACKEND = "https://testing-api.inventario.cl";
+    URL_BACKEND = "https://api-inv.trebolapp.cl";
     
 }else if(ENVIROMENT == "production"){
     URL_LOGIN = "https://www.inventario.cl/login.html"
