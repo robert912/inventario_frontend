@@ -1,5 +1,5 @@
 var api = {};
-var tokenRecaptcha = "6Lc1WpMrAAAAAAqVt8lvLiL1TjX_sXHJZuOTUOQj";
+var tokenRecaptcha = "6Le3QSQsAAAAACV22gMOE_URIg7fUQRl5UvVKfGK";
 renderGoogleButton();
 
 var loginAction = function () {
