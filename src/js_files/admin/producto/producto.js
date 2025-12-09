@@ -216,12 +216,12 @@ function modalProducto(selectorId, data){
         var datos = {}
         switch (selectorId) {
             case 'tabla_categoria':
+                $("#equipo").removeClass("valid");
                 $('#equipo, #marca, #modelo, #modeloValor').hide();
                 $('#equipoProcedimiento, #modeloValor, label[for="equipoProcedimiento"], label[for="modeloValor"]').hide();
                 $('label[for="equipo"], label[for="marca"], label[for="modelo"], label[for="modeloValor"], .custom-checkbox').hide();
                 etiquetaInput = 'categoria';
                 if (typeof data != 'undefined') {
-                    $('#categoria').val(data['nombre']);
                     $("#tituloModal").text("Editar categoria");
                     $("#submitFormEquipo").text("Editar");
                     $("#categoria").val(data['nombre']);
