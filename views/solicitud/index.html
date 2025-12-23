@@ -1,0 +1,153 @@
+<div class="container-fluid">
+    <!--**********************************
+	Ecabezado de Solicitudes de Inventario
+	***********************************-->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0">
+                        <i class="bi bi-clipboard-check text-primary me-2"></i>
+                        Solicitudes de Inventario
+                    </h1>
+                    <p class="text-muted mb-0">Gestión y seguimiento de solicitudes</p>
+                </div>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deviceModal"
+                    onclick="openAddModal()">
+                    <i class="fas fa-plus me-2"></i>Agregar Producto al Inventario
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <!--**********************************
+        Inicio Tabla solicitudes de Inventario
+        ***********************************-->
+        <div class="col-12 active-p">
+            <div class="card">
+                <div class="card-body p-2">
+                    <div class="table-responsive active-projects shorting">
+
+                        <div class="tbl-caption d-flex justify-content-between p-2">
+                            <h4 class="heading mb-0"><i class="fas fa-table me-2"></i>Lista de Solicitudes</h4>
+                        </div>
+                        <table id="tablaSolicitudes" class="table display" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>SKU</th>
+                                    <th>Producto</th>
+                                    <th>Solicitante</th>
+                                    <th>Ubicacion</th>
+                                    <th>Qty</th>
+                                    <th>Estado</th>
+                                    <th>Justificacion</th>
+                                    <th style="width: 5rem">Acciones</th>
+                                </tr>
+                                <tr>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-sku" name="sku" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-producto" name="producto" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-solicitante" name="solicitante" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-ubicacion" name="ubicacion" style="width: 100%;" autocomplete="off"></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-cantidad" name="cantidad" style="width: 100%;" autocomplete="off"></th>
+                                    <th></th>
+                                    <th class="search-change sorting_disabled p-1"><input type="search" id="search-justificacion" name="justificacion" style="width: 100%;" autocomplete="off"></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+		Fin Tabla solicitudes de Inventario
+        ***********************************-->
+        <!--**********************************
+        Modal para Agregar/Editar Inventario
+        ***********************************-->
+        <!-- Modal Detalle Solicitud -->
+<div class="modal fade" id="modalDetalleSolicitud" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-clipboard-check me-2 text-primary"></i>
+                    Detalle de Solicitud
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <!-- Equipo -->
+                <div class="mb-3">
+                    <h6 class="fw-bold text-primary">Equipo solicitado</h6>
+                    <p class="mb-1"><strong>SKU:</strong> <span id="md-sku"></span></p>
+                    <p class="mb-1"><strong>Producto:</strong> <span id="md-producto"></span></p>
+                </div>
+
+                <hr>
+
+                <!-- Solicitud -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Solicitante:</strong> <span id="md-solicitante"></span></p>
+                        <p><strong>Ubicación:</strong> <span id="md-ubicacion"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Cantidad solicitada:</strong> <span id="md-cantidad"></span></p>
+                        <p><strong>Estado:</strong> <span id="md-estado"></span></p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Justificación -->
+                <div class="mb-3">
+                    <h6 class="fw-bold">Justificación</h6>
+                    <div class="border rounded p-2 bg-light" id="md-justificacion"></div>
+                </div>
+
+                <!-- Respuesta -->
+                <div class="mb-3 d-none" id="respuestaContainer">
+                    <h6 class="fw-bold">Respuesta</h6>
+                    <div class="border rounded p-2 bg-light" id="md-respuesta"></div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+
+                <button type="button" class="btn btn-danger d-none" id="btnRechazar">
+                    <i class="bi bi-x-circle me-1"></i>Rechazar
+                </button>
+
+                <button type="button" class="btn btn-success d-none" id="btnAprobar">
+                    <i class="bi bi-check-circle me-1"></i>Aprobar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+        <!--**********************************
+        Fin Modal para Agregar/Editar Dispositivo
+        ***********************************-->
+    </div>
+</div>
+<!--**********************************
+Modal Imprimir id calibracion
+***********************************-->
+<div id="modalContainer"></div>
+
+<script>
+    $('#full-layout').append("<script type='text/javascript' src='src/js_files/solicitud/index.js?v=" + VERSION_JS + "'><\/script>");
+    //$('#full-layout').append("<script type='text/javascript' src='/js_files/dashboard/reingreso.js?v=" + VERSION_JS + "'><\/script>");
+</script>
