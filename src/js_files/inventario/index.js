@@ -152,6 +152,12 @@ function loadDataTable() {
                 }
             },
             { 
+                data: 'stock_reservado',
+                render: function(data) {
+                    return data || '0';
+                }
+            },
+            { 
                 data: 'disponible',
                 render: function(data) {
                     if (data == 1) {
@@ -176,7 +182,8 @@ function loadDataTable() {
                     return `
                     <div class="d-flex">
                         <a href="#" class="btn btn-outline-success shadow btn-xs sharp me-1 ver-detalle" title='Ver detalle' ><i class='icon-magnifier'></i></a>
-                        ${row['estado'] < 4 && row['estado'] != 0 ? '<a href="#" class="btn btn-outline-danger shadow me-1 btn-xs sharp cancelar" title="Cancelar proceso"><i class="bi bi-x-octagon"></i></a>' : ''}
+                        <a href="#" class="btn btn-outline-primary shadow btn-xs sharp me-1 historial" title="Historial Inventario"><i class="bi bi-clock-history"></i></a>
+                        <a href="#" class="btn btn-outline-orange shadow btn-xs sharp me-1 print-etiqueta" title='Historial Asignaciones'><i class="bi bi-journal-text"></i></a>
                     </div>`;
                 },
                 "searchable": false,
@@ -204,10 +211,10 @@ function searchValid(value) {
     return value !== undefined && value !== null && value.trim() !== '';
 }
 
-$('#tablaInventarioProductos').on('click', 'a.ver-detalle', function () {
-    let data_row = tableEstados.row($(this).parents('tr')).data();
-    showModalDetalleCalibracion(data_row);
-});
+// $('#tablaInventarioProductos').on('click', 'a.ver-detalle', function () {
+//     let data_row = tableEstados.row($(this).parents('tr')).data();
+//     showModalDetalleCalibracion(data_row);
+// });
 
 // Abrir modal para agregar
 function openAddModal() {

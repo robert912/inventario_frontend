@@ -82,11 +82,26 @@
 
             <div class="modal-body">
 
-                <!-- Equipo -->
-                <div class="mb-3">
-                    <h6 class="fw-bold text-primary">Equipo solicitado</h6>
-                    <p class="mb-1"><strong>SKU:</strong> <span id="md-sku"></span></p>
-                    <p class="mb-1"><strong>Producto:</strong> <span id="md-producto"></span></p>
+                <div class="row">
+                    <!-- Equipo -->
+                    <div class="col-md-6 mb-3">
+                        <h6 class="fw-bold text-primary">Equipo solicitado</h6>
+                        <p class="mb-1"><strong>SKU:</strong> <span id="md-sku"></span></p>
+                        <p class="mb-1"><strong>Producto:</strong> <span id="md-producto"></span></p>
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="col-md-6 mb-3">
+                        <h6 class="fw-bold text-primary">
+                            <i class="bi bi-box-seam me-1"></i> Stock disponible
+                        </h6>
+                        <p class="mb-1">
+                            <strong>Unidades disponibles:</strong>
+                            <span id="md-stock"></span>
+                        </p>
+                        <p class="mb-0 text-muted small">Stock actual en inventario</p>
+                    </div>
+
                 </div>
 
                 <hr>
@@ -108,28 +123,44 @@
                 <!-- Justificación -->
                 <div class="mb-3">
                     <h6 class="fw-bold">Justificación</h6>
-                    <div class="border rounded p-2 bg-light" id="md-justificacion"></div>
+                    <div class="border rounded p-2" id="md-justificacion"></div>
                 </div>
 
                 <!-- Respuesta -->
                 <div class="mb-3 d-none" id="respuestaContainer">
                     <h6 class="fw-bold">Respuesta</h6>
-                    <div class="border rounded p-2 bg-light" id="md-respuesta"></div>
+                    <div class="border rounded p-2" id="md-respuesta"></div>
                 </div>
 
             </div>
 
             <div class="modal-footer">
+                <!-- Cerrar -->
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     Cerrar
                 </button>
-
+            
+                <!-- Rechazar (solo cuando está pendiente) -->
                 <button type="button" class="btn btn-danger d-none" id="btnRechazar">
-                    <i class="bi bi-x-circle me-1"></i>Rechazar
+                    <i class="bi bi-x-circle me-1"></i>
+                    Rechazar
                 </button>
-
+            
+                <!-- Aprobar (solo cuando está pendiente) -->
                 <button type="button" class="btn btn-success d-none" id="btnAprobar">
-                    <i class="bi bi-check-circle me-1"></i>Aprobar
+                    <i class="bi bi-check-circle me-1"></i>
+                    Aprobar
+                </button>
+            
+                <!-- Asignar / Entregar (solo cuando está aprobada) -->
+                <button type="button" class="btn btn-primary d-none" id="btnAsignar">
+                    <i class="bi bi-box-seam me-1"></i>
+                    Asignar producto
+                </button>
+            
+                <!-- Cancelar aprobación (solo cuando está aprobada y NO entregada) -->
+                <button type="button" class="btn btn-outline-danger d-none" id="btnCancelarAprobacion">
+                    Cancelar aprobación
                 </button>
             </div>
 

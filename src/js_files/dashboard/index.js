@@ -1,20 +1,4 @@
 $(document).ready(function () {
-    // $.ajax({
-    //     url: URL_BACKEND + '/obtener_img',
-    //     type: 'GET',
-    //     data: { producto: 'multímetro fluke 175' },
-    //     success: function (response) {
-    //         if (response.url) {
-    //             console.log('Imagen encontrada:', response.url);
-    //             $('#imagenProducto').attr('src', response.url);
-    //         } else {
-    //             console.log('No se encontró imagen');
-    //         }
-    //     },
-    //     error: function () {
-    //         console.log('Error en la solicitud');
-    //     }
-    // });
     initializeFilters();
 });
 
@@ -61,13 +45,12 @@ async function loadCategorias() {
         });
 
         if (response.success && response.data) {
-            let categorias = response.data;
-            $('#categoryFilter').empty(); // Limpiar primero
-            $('#categoryFilter').append(new Option('Todas las categorías', '', true, true));
-            
-            categorias.forEach(c => {
-                let option = new Option(c.nombre, c.id, false, false);
-                $('#categoryFilter').append(option);
+            const $category = $('#categoryFilter');
+            $category.empty();
+            $category.append(new Option('Todas las categorías', '', true, true));
+
+            response.data.forEach(c => {
+                $category.append(new Option(c.nombre, c.id, false, false));
             });
             
         }
@@ -80,14 +63,8 @@ async function loadCategorias() {
 function loadCatalogo(searchTerm = '', categoriaId = '') {
     // Preparar datos para la API
     const data = {};
-    
-    if (searchTerm) {
-        data.search = searchTerm;
-    }
-    
-    if (categoriaId) {
-        data.id_categoria = categoriaId;
-    }
+    if (searchTerm) data.search = searchTerm;
+    if (categoriaId) data.id_categoria = categoriaId;
     
     // Mostrar loading
     const productsGrid = document.getElementById('productsGrid');
@@ -104,8 +81,9 @@ function loadCatalogo(searchTerm = '', categoriaId = '') {
         data: data,
         success: function (response) {
             if (response.success) {
-                renderProducts(response.data);
-                updateProductCount(response.data.length);
+                const productos = Array.isArray(response.data) ? response.data : [];
+                renderProducts(productos);
+                updateProductCount(productos.length);
             } else {
                 toastr.warning(response.message || "No se pudieron cargar los productos", "Atención");
                 renderProducts([]);
@@ -135,6 +113,11 @@ function renderProducts(products) {
     }
 
     products.forEach(product => {
+        // Stock disponible real
+        const reservados = Number(product.stock_reservado || 0);
+        const stock = Number(product.stock || 0);
+        product.stock_disponible = Math.max(stock - reservados, 0);
+
         const productCard = createProductCard(product);
         productsGrid.appendChild(productCard);
     });
@@ -148,10 +131,10 @@ function createProductCard(product) {
     let statusClass = 'badge-disponible';
     let statusText = 'Disponible';
     
-    if (product.stock === 0) {
+    if (product.stock_disponible === 0) {
         statusClass = 'badge-sin-stock';
         statusText = 'Sin stock';
-    } else if (product.stock <= 5) {
+    } else if (product.stock_disponible <= 5) {
         statusClass = 'badge-stock-bajo';
         statusText = 'Stock bajo';
     }
@@ -177,11 +160,11 @@ function createProductCard(product) {
             </div>
             <div class="product-footer">
                 <div class="stock-info">
-                    <span class="stock-label">Stock:</span> ${product.stock} uds.
+                    <span class="stock-label">Stock:</span> ${product.stock_disponible} uds.
                 </div>
                 <button class="btn btn-solicitar" data-bs-toggle="modal" data-bs-target="#solicitarProductoModal"
                     onclick="solicitarProducto(${product.id}, '${product.nombre_completo.replace(/'/g, "\\'")}')"
-                    ${product.stock === 0 || product.disponible === 0 ? 'disabled' : ''}>
+                    ${product.stock_disponible === 0 || product.disponible === 0 ? 'disabled' : ''}>
                     <i class="fas fa-shopping-cart"></i>
                     Solicitar
                 </button>
@@ -218,13 +201,6 @@ function updateProductCount(count) {
 
 function solicitarProducto(productId, productName) {
     cargarSelector("ubicacionNombre", null, "/ubicacion/activas", 'Seleccione una Ubicación', 'solicitarProductoModal');
-    // $("#ubicacionNombre").select2({
-    //     dropdownParent: $("#solicitarProductoModal"), // importante para que funcione dentro del modal
-    //     tags: false, // permite agregar nuevos valores
-    //     placeholder: "Escriba o seleccione una opción",
-    //     allowClear: true,
-    //     width: "100%"
-    // });
     
     $.ajax({
         url: URL_BACKEND + "/inventario/detalle", // o la ruta donde devuelves esa data
@@ -246,19 +222,29 @@ function solicitarProducto(productId, productName) {
 
 
 function mostrarModalSolicitud(data) {
+    // Remover estilos previos
+    const form = document.getElementById("solicitudForm");
+    form.reset();
+    form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+    form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+
     const solicitante = data.solicitante;
     const inventario = data.inventario[0];
     const responsable = data.responsable;
+
+    const stock = Number(inventario.stock || 0);
+    const reservados = Number(inventario.stock_reservado || 0);
+    const disponible = Math.max(stock - reservados, 0);
 
     // Imagen y nombre
     $("#productoImagen").attr("src", inventario.imagen_url || "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&h=400&fit=crop");
     $("#productoNombre").text(`${inventario.nombre_completo}`);
     $("#sku").text(`SKU: ${inventario.sku}`);
 
-    // Stock
-    $("#cantidad").attr("max", inventario.stock);
-    $("#stock").text(`Stock: ${inventario.stock}`);
-    $("#stockMaximo").text(`Máximo disponible: ${inventario.stock} unidades`);
+    // Stock + límites input (consistente)
+    $("#cantidad").attr("max", disponible).val(disponible > 0 ? 1 : 0);
+    $("#stock").text(`Stock: ${disponible}`);
+    $("#stockMaximo").text(`Máximo disponible: ${disponible} unidades`);
 
     // Datos del solicitante y responsable
     $("#solicitanteNombre").val(solicitante.nombre);
@@ -291,8 +277,10 @@ function inicializarSelectsResponsable(responsable, modalId = "#solicitarProduct
     $responsableSelect.select2({ ...selectOptions, placeholder: "Seleccione un responsable..." });
 
     // Cargar responsables
-    responsable.forEach(r => {
-        const option = new Option(`${r.nombre_responsable}`, r.id_responsable, false, false);
+    (responsable || []).forEach(r => {
+        const texto = `${r.nombre_responsable} - Stock: ${r.qty_disponible}`;
+        const option = new Option(texto, r.id_responsable, false, false);
+        $(option).data('qty', Number(r.qty_disponible || 0));
         $responsableSelect.append(option);
     });
     $responsableSelect.prop("disabled", false).trigger("change");
@@ -367,18 +355,10 @@ function enviarSolicitud() {
 }
 
 // Validar cantidad en tiempo real
-document.addEventListener('DOMContentLoaded', function() {
-    const cantidadInput = document.getElementById('cantidad');
-    
-    if (cantidadInput) {
-        cantidadInput.addEventListener('input', function() {
-            const valor = parseInt(this.value);
-            if (valor > 3) {
-                this.value = 3;
-            } else if (valor < 1) {
-                this.value = 1;
-            }
-        });
+const cantidad = document.getElementById('cantidad');
+cantidad.addEventListener('blur', () => {
+    if (!cantidad.value || parseInt(cantidad.value) < 1) {
+        cantidad.value = 1;
     }
 });
 
@@ -431,6 +411,10 @@ function validarFormularioSolicitud() {
     const form = document.getElementById('solicitudForm');
     let valido = true;
 
+    const $sel = $('#selectGestorNombre');
+    const qtyResponsable = Number($sel.find('option:selected').data('qty') || 0);
+    const cantidad = parseInt($('#cantidad').val(), 10);
+
     // Remover estilos previos
     form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
     form.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
@@ -472,7 +456,20 @@ function validarFormularioSolicitud() {
             feedback.classList.add('invalid-feedback');
             feedback.textContent = `Ingrese un correo electrónico válido.`;
             input.parentNode.appendChild(feedback);
+        } else if (campo.id === 'selectGestorNombre' && cantidad > qtyResponsable) {
+            valido = false;
+            input.classList.add('is-invalid');
+            const feedback = document.createElement('div');
+            feedback.classList.add('invalid-feedback');
+            feedback.textContent = `El responsable seleccionado solo tiene ${qtyResponsable} unidades disponibles.`;
+            input.parentNode.appendChild(feedback);
         }
     });
+
+    // Si falla algo básico, no seguimos
+    if (!valido) return false;
+
+
+
     return valido;
 }

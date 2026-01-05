@@ -81,10 +81,10 @@ Modal Solicitud de Producto
 
                         <!-- Columna Derecha: Información -->
                         <div class="col-md-8 ps-md-3 mt-3 mt-md-0">
-                            <h6 id="productoNombre" class="fw-semibold mb-1">Impresora HP LaserJet</h6>
-                            <p id="sku" class="small mb-2">SKU: INV-000001</p>
+                            <h6 id="productoNombre" class="fw-semibold mb-1">Producto Nombre</h6>
+                            <p id="sku" class="small mb-2">SKU: INV-000000</p>
                             <div class="d-flex flex-wrap gap-3 small mb-1">
-                                <span class="badge bg-white text-dark border" id="stock">Stock: 3</span>
+                                <span class="badge bg-white text-dark border" id="stock">Stock: 0</span>
                             </div>
                             <!--div class="small text-muted text-capitalize">
                                 <div id="responsableNombre">Gestor de Bodega: Juan Pérez</div>
@@ -110,7 +110,7 @@ Modal Solicitud de Producto
 
                         <div class="col-md-6 mt-3">
                             <label for="cantidad" class="form-label small fw-semibold"><i class="bi bi-box-seam me-1"></i>Cantidad solicitada</label>
-                            <input type="number" class="form-control valid" id="cantidad" value="1" min="1" required>
+                            <input type="number" class="form-control valid" id="cantidad" value="1" min="1" step="1" required>
                             <small class="text-muted" id="stockMaximo"></small>
                         </div>
 

@@ -186,8 +186,8 @@ function loadDataTable() {
                     return `
                     <div class="d-flex">
                         <a href="#" class="btn btn-outline-success shadow btn-xs sharp me-1 ver-detalle" title='Ver detalle' ><i class='icon-magnifier'></i></a>
-                        <a href="#" class="btn btn-outline-purple shadow btn-xs sharp me-1 print-etiqueta" title='Imprimir etiqueta'><i class="fa fa-print"></i></a>
-                        ${row['estado'] < 4 && row['estado'] != 0 ? '<a href="#" class="btn btn-outline-danger shadow me-1 btn-xs sharp cancelar" title="Cancelar proceso"><i class="bi bi-x-octagon"></i></a>' : ''}
+                        <a href="#" class="btn btn-outline-primary shadow btn-xs sharp me-1 print-etiqueta" title='Historial Asignacion'><i class="bi bi-clock-history"></i></a>
+                        <a href="#" class="btn btn-outline-purple shadow btn-xs sharp me-1 cancelar" title="Re-asignar"><i class="bi bi-arrow-left-right"></i></a>
                     </div>`;
                 },
                 "searchable": false,
