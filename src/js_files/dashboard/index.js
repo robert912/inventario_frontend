@@ -355,11 +355,16 @@ function enviarSolicitud() {
 }
 
 // Validar cantidad en tiempo real
-const cantidad = document.getElementById('cantidad');
-cantidad.addEventListener('blur', () => {
-    if (!cantidad.value || parseInt(cantidad.value) < 1) {
-        cantidad.value = 1;
-    }
+document.addEventListener('DOMContentLoaded', function () {
+    const cantidadInput = document.getElementById('cantidad');
+    if (!cantidadInput) return;
+
+    cantidadInput.addEventListener('blur', () => {
+        const valor = parseInt(cantidadInput.value, 10);
+        if (!valor || valor < 1) {
+            cantidadInput.value = 1;
+        }
+    });
 });
 
 
